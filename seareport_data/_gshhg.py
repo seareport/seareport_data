@@ -1,7 +1,4 @@
-import pathlib
 import typing as T
-
-import pooch
 
 from . import _core as core
 
@@ -90,11 +87,10 @@ def fetch_gshhg(
     filename = _get_gshhg_filename(resolution=resolution, shoreline=shoreline)
     core._is_version_valid(record=GSHHG, filename=filename, version=version, allowed=_GSHHG_ALLOWED)
     registry = core._load_registry(registry_url=registry_url)
-    cache_path = pathlib.Path(pooch.os_cache("seareport_data")) / GSHHG / version
     entry = registry[GSHHG][version]
     doi = core._sanitize_url(entry["doi"])
     hash = entry["hashes"][filename]
     url = doi + filename
-    repo = core._get_repository(cache_path=cache_path, filename=filename, hash=hash, url=url)
+    repo = core._get_repository(record=GSHHG, version=version, filename=filename, hash=hash, url=url)
     path: str = repo.fetch(filename)
     return path

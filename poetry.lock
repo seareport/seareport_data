@@ -853,6 +853,20 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx"]
 test = ["argcomplete (>=3.0.3)", "mypy (>=1.7.0)", "pre-commit", "pytest (>=7.0,<8.2)", "pytest-mock", "pytest-mypy-testing"]
 
 [[package]]
+name = "types-requests"
+version = "2.32.0.20240914"
+description = "Typing stubs for requests"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-requests-2.32.0.20240914.tar.gz", hash = "sha256:2850e178db3919d9bf809e434eef65ba49d0e7e33ac92d588f4a5e295fffd405"},
+    {file = "types_requests-2.32.0.20240914-py3-none-any.whl", hash = "sha256:59c2f673eb55f32a99b2894faf6020e1a9f4a402ad0f192bfee0b64469054310"},
+]
+
+[package.dependencies]
+urllib3 = ">=2"
+
+[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -905,4 +919,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3c3ba4b36d4a1aeaadac350e7a9b80b5b646668de63fff8b157b1ebde93817df"
+content-hash = "942d10b834ad269dc0cd3971ab917a702484ed5451d4598e6156ead27cc113e6"

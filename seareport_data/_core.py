@@ -1,5 +1,6 @@
 import importlib.resources
 import json
+import os
 import pathlib
 import typing as T
 from collections import abc
@@ -46,7 +47,7 @@ def _is_version_valid(
         raise ValueError(msg)
 
 
-def _get_repository(cache_path: pathlib.Path, filename: str, hash: str, url: str) -> pooch.Pooch:
+def _get_repository(record: str, version: str, filename: str, hash: str, url: str) -> pooch.Pooch:
     """
     Create the Pooch instance that fetches a dataset of a particular version
 
@@ -58,6 +59,9 @@ def _get_repository(cache_path: pathlib.Path, filename: str, hash: str, url: str
     repository : :class:`pooch.Pooch`
 
     """
+    cache_path = pathlib.Path(pooch.os_cache("seareport_data")) / record / version
+    if seareport_data_dir := os.environ.get("SEAREPORT_DATA_DIR"):
+        os.environ["SEAREPORT_DATA_DIR"] = str(pathlib.Path(seareport_data_dir) / record / version)
     repository = pooch.create(
         path=cache_path,
         # Just here so that Pooch doesn't complain about there not being a format marker in the string.
