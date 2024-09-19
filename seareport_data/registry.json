@@ -1,0 +1,19 @@
+{
+  "GSHHG": {
+    "2.3.7.1": {
+      "doi": "doi:10.5281/zenodo.13785430",
+      "hashes": {
+        "gshhg_crude_l5.gpkg": "md5:78e33734ce928aff0f805cfccabe8763",
+        "gshhg_crude_l6.gpkg": "md5:046b6f86eb8fabe1034d47034d9a3000",
+        "gshhg_full_l5.gpkg": "md5:385a24eca3a2ec174581237195d13ef0",
+        "gshhg_full_l6.gpkg": "md5:5a410c15b44a1e691e271afe490bd69a",
+        "gshhg_high_l5.gpkg": "md5:c46066a43e506a6fb61bc0f262b8c9f3",
+        "gshhg_high_l6.gpkg": "md5:1c5b380f9d5a381d67dafa6089d35556",
+        "gshhg_intermediate_l5.gpkg": "md5:68baced7274ee54ec61bcbe2bb566f2a",
+        "gshhg_intermediate_l6.gpkg": "md5:531e1a1bbb9ccd7a4f57c982d9f3eeeb",
+        "gshhg_low_l5.gpkg": "md5:5e92a98001b4d292166cec985d69d926",
+        "gshhg_low_l6.gpkg": "md5:67478c85636228d051ed9660535e881f"
+      }
+    }
+  }
+}
