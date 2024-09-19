@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 pooch = "*"
+requests = "*"
 
 [tool.poetry.group.dev.dependencies]
 geopandas = "*"
