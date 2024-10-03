@@ -1,11 +1,13 @@
 import importlib.metadata
 
-from ._gshhg import fetch_gshhg
+from ._gebco import gebco
+from ._gshhg import gshhg
 
 __version__ = importlib.metadata.version(__name__)
 
 
 __all__: list[str] = [
-    "fetch_gshhg",
+    "gebco",
+    "gshhg",
     "__version__",
 ]

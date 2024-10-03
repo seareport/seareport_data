@@ -1,18 +1,49 @@
 {
+  "GEBCO": {
+    "2024": {
+      "ice": {
+        "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2024/zip/",
+        "archive": "gebco_2024.zip",
+        "filename": "GEBCO_2024.nc",
+        "hash": "4d19ae9325234a57011daf9173dba4e3"
+      },
+      "sub_ice": {
+        "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2024_sub_ice_topo/zip/",
+        "archive": "gebco_2024_sub_ice_topo.zip",
+        "filename": "GEBCO_2024_sub_ice_topo.nc",
+        "hash": "c879ecb93e2a8da3ba45a6ba833025ed"
+      }
+    },
+    "2023": {
+      "ice": {
+        "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023/zip/",
+        "archive": "gebco_2023.zip",
+        "filename": "GEBCO_2023.nc",
+        "hash": "dd14216e4914ab165b61a52cdeda86dc"
+      },
+      "sub_ice": {
+        "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023_sub_ice_topo/zip/",
+        "archive": "gebco_2023_sub_ice_topo.zip",
+        "filename": "GEBCO_2023_sub_ice_topo.nc",
+        "hash": "abda2666d40f6f946a6d1b349fdeacb7"
+      }
+    }
+  },
   "GSHHG": {
     "2.3.7.1": {
       "doi": "doi:10.5281/zenodo.13785430",
+      "base_url": "https://zenodo.org/records/13785430/files/",
       "hashes": {
-        "gshhg_crude_l5.gpkg": "md5:78e33734ce928aff0f805cfccabe8763",
-        "gshhg_crude_l6.gpkg": "md5:046b6f86eb8fabe1034d47034d9a3000",
-        "gshhg_full_l5.gpkg": "md5:385a24eca3a2ec174581237195d13ef0",
-        "gshhg_full_l6.gpkg": "md5:5a410c15b44a1e691e271afe490bd69a",
-        "gshhg_high_l5.gpkg": "md5:c46066a43e506a6fb61bc0f262b8c9f3",
-        "gshhg_high_l6.gpkg": "md5:1c5b380f9d5a381d67dafa6089d35556",
-        "gshhg_intermediate_l5.gpkg": "md5:68baced7274ee54ec61bcbe2bb566f2a",
-        "gshhg_intermediate_l6.gpkg": "md5:531e1a1bbb9ccd7a4f57c982d9f3eeeb",
-        "gshhg_low_l5.gpkg": "md5:5e92a98001b4d292166cec985d69d926",
-        "gshhg_low_l6.gpkg": "md5:67478c85636228d051ed9660535e881f"
+        "gshhg_crude_l5.gpkg": "e1b51a304af2a3aec649ccb71ed916d1",
+        "gshhg_crude_l6.gpkg": "bd1f4fcbd166ba8081e571d0c71d8cef",
+        "gshhg_full_l5.gpkg": "a2a52c79dbb13cf0c3b83c4818cdc6dc",
+        "gshhg_full_l6.gpkg": "444045df6eea8c5c70da16cd522cac2e",
+        "gshhg_high_l5.gpkg": "173a1e751a7c77cfff3437743ef23fe1",
+        "gshhg_high_l6.gpkg": "0443d3f275608924f94709c3382b3db2",
+        "gshhg_intermediate_l5.gpkg": "94512ece0a4fd564948ad2df9cfe3e27",
+        "gshhg_intermediate_l6.gpkg": "399154667eeece720163cafe56b7e71a",
+        "gshhg_low_l5.gpkg": "e737e815eba8838e909e580ab9a2f784",
+        "gshhg_low_l6.gpkg": "012b42953d0cbffc97ef02d5123a4a6b"
       }
     }
   }

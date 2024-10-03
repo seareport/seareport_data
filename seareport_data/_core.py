@@ -1,75 +1,114 @@
 import importlib.resources
 import json
+import logging
 import os
 import pathlib
+import shutil
+import sys
 import typing as T
-from collections import abc
+import zipfile
 
-import pooch
-import requests
+import httpx
+import platformdirs
+import stamina
+import xxhash
+from tqdm.auto import tqdm
+
+logger = logging.getLogger(__name__)
 
 
-def _load_registry(registry_url: str | None = None) -> dict[str, dict[str, dict[str, T.Any]]]:
+def enforce_literals(function: T.Callable[..., T.Any]) -> None:
+    kwargs = sys._getframe(1).f_locals
+    for name, type_ in function.__annotations__.items():
+        value = kwargs.get(name)
+        options = T.get_args(type_)
+        if T.get_origin(type_) is T.Literal and name in kwargs and value not in options:
+            raise AssertionError(f"'{value}' is not in {options} for '{name}'")
+
+
+def resolve_httpx_client(client: httpx.Client | None = None) -> httpx.Client:
+    if client is None:
+        timeout = httpx.Timeout(timeout=10, read=30)
+        client = httpx.Client(timeout=timeout)
+    return client
+
+
+@stamina.retry(on=httpx.HTTPError, attempts=3)
+def download(
+    url: str,
+    filename: os.PathLike[str] | str,
+    client: httpx.Client | None = None,
+) -> None:
+    client = resolve_httpx_client(client=client)
+    with client.stream("GET", url) as response:
+        response.raise_for_status()
+        with open(filename, "wb") as fd:
+            total = int(response.headers["Content-Length"])
+            tqdm_params = {
+                "desc": url,
+                "total": total,
+                "miniters": 1,
+                "unit": "B",
+                "unit_scale": True,
+                "unit_divisor": 1024,
+            }
+            with tqdm(**tqdm_params) as progress:
+                downloaded = response.num_bytes_downloaded
+                for chunk in response.iter_bytes():
+                    fd.write(chunk)
+                    progress.update(response.num_bytes_downloaded - downloaded)
+                    downloaded = response.num_bytes_downloaded
+
+
+def extract(archive: os.PathLike[str] | str, filename: str, target_dir: os.PathLike[str] | str) -> None:
+    logger.debug(f"Extracting {filename} to: {target_dir}")
+    with zipfile.ZipFile(archive, "r") as zip_ref:
+        zip_ref.extract(member=filename, path=target_dir)
+
+
+def hash_file(path: os.PathLike[str] | str, chunksize: int = 2**20) -> str:
+    hasher = xxhash.xxh128()
+    with open(path, "rb") as fd:
+        for chunk in iter(lambda: fd.read(chunksize), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+def check_hash(path: os.PathLike[str] | str, expected_hash: str) -> None:
+    logger.debug(f"Checking hash of: {path}")
+    current_hash = hash_file(path)
+    if current_hash != expected_hash:
+        raise ValueError(f"hash mismatch: {current_hash} != {expected_hash}")
+
+
+def get_cache_path() -> pathlib.Path:
+    cache = os.environ.get(
+        "SEAREPORT_DATA_DIR",
+        platformdirs.user_cache_dir("seareport_data"),
+    )
+    cache_path = pathlib.Path(cache)
+    cache_path.mkdir(parents=True, exist_ok=True)
+    return cache_path
+
+
+def lenient_remove(path: os.PathLike[str] | str) -> None:
+    if os.path.exists(path):
+        try:
+            os.remove(path)
+        except Exception:
+            logger.exception("Failed to remove: %s", path)
+
+
+def lenient_remove_tree(path: os.PathLike[str] | str) -> None:
+    try:
+        shutil.rmtree(path)
+    except Exception:
+        logger.exception("Failed to remove: %s", path)
+
+
+def load_registry(registry_url: str | None = None) -> dict[str, dict[str, dict[str, T.Any]]]:
     if registry_url:
-        registry: dict[str, T.Any] = requests.get(registry_url, timeout=30).json()
+        registry: dict[str, T.Any] = httpx.get(registry_url, timeout=30).json()
     else:
         registry = json.load(importlib.resources.open_text("seareport_data", "registry.json"))
     return registry
-
-
-def _sanitize_url(url: str) -> str:
-    if not url.endswith("/"):
-        url += "/"
-    return url
-
-
-def _is_version_valid(
-    record: str,
-    filename: str,
-    version: str,
-    allowed: abc.Collection[str],
-) -> None:
-    """
-    Check if the version is in the allowed range, raise an error if not.
-
-    Parameters
-    ----------
-    version : int
-        Integer version of the data.
-    allowed : set or list
-        List or set of allowed values for the version.
-    name : str
-        Name of the dataset (used in the error message).
-
-    """
-    if version not in allowed:
-        msg = f"Invalid version={version} for {record}/{filename}. It must be one of {allowed}."
-        raise ValueError(msg)
-
-
-def _get_repository(record: str, version: str, filename: str, hash: str, url: str) -> pooch.Pooch:
-    """
-    Create the Pooch instance that fetches a dataset of a particular version
-
-    Cache location defaults to ``pooch.os_cache("seareport_data")`` and can be
-    overwritten with the ``SEAREPORT_DATA_DIR`` environment variable.
-
-    Returns
-    -------
-    repository : :class:`pooch.Pooch`
-
-    """
-    cache_path = pathlib.Path(pooch.os_cache("seareport_data")) / record / version
-    if seareport_data_dir := os.environ.get("SEAREPORT_DATA_DIR"):
-        os.environ["SEAREPORT_DATA_DIR"] = str(pathlib.Path(seareport_data_dir) / record / version)
-    repository = pooch.create(
-        path=cache_path,
-        # Just here so that Pooch doesn't complain about there not being a format marker in the string.
-        base_url="{version}",
-        version=None,
-        env="SEAREPORT_DATA_DIR",
-        retry_if_failed=3,
-        registry={filename: hash},
-        urls={filename: url},
-    )
-    return repository

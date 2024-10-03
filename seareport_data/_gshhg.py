@@ -1,25 +1,15 @@
+from __future__ import annotations
+
+import logging
 import typing as T
 
 from . import _core as core
 
-CRUDE: T.Literal["crude"] = "crude"
-LOW: T.Literal["low"] = "low"
-INTERMEDIATE: T.Literal["intermediate"] = "intermediate"
-HIGH: T.Literal["high"] = "high"
-FULL: T.Literal["full"] = "full"
-
-GSHHG: T.Literal["GSHHG"] = "GSHHG"
-GSHHG_CRUDE_L5: T.Literal["crude_l5"] = "crude_l5"
-GSHHG_CRUDE_L6: T.Literal["crude_l6"] = "crude_l6"
-
-GSHHG_V237_1: T.Literal["2.3.7.1"] = "2.3.7.1"
-GSHHG_V237_2: T.Literal["2.3.7.2"] = "2.3.7.2"
-GSHHG_V237_3: T.Literal["2.3.7.3"] = "2.3.7.3"
-GSHHG_LATEST = GSHHG_V237_1
+logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-Records = T.Literal["GSHHG"]
+GSHHGVersion = T.Literal["2.3.7.1"]
 GSHHGResolution = T.Literal[
     "c",
     "l",
@@ -38,10 +28,21 @@ GSHHGResolution = T.Literal[
     "full",
 ]
 GSHHGShoreline = T.Literal[5, 6, "5", "6"]
-# CONSTANTS
-RECORDS: set[Records] = set(T.get_args(Records))
-GSHHG_RESOLUTIONS: set[GSHHGResolution] = set(T.get_args(GSHHGResolution))
-GSHHG_SHORELINES: set[GSHHGShoreline] = set(T.get_args(GSHHGShoreline))
+# Constants
+GSHHG: T.Literal["GSHHG"] = "GSHHG"
+CRUDE: T.Literal["crude"] = "crude"
+LOW: T.Literal["low"] = "low"
+INTERMEDIATE: T.Literal["intermediate"] = "intermediate"
+HIGH: T.Literal["high"] = "high"
+FULL: T.Literal["full"] = "full"
+GSHHG_LATEST_VERSION: GSHHGVersion = sorted(T.get_args(GSHHGVersion))[-1]
+
+
+class GSHHGRecord(T.TypedDict):
+    doi: str
+    base_url: str
+    hashes: dict[str, str]
+
 
 SHORT_TO_LONG_GSHHG_RESOLUTIONS = {
     "c": CRUDE,
@@ -51,22 +52,8 @@ SHORT_TO_LONG_GSHHG_RESOLUTIONS = {
     "f": FULL,
 }
 
-_GSHHG_ALLOWED = set(core._load_registry()[GSHHG].keys())
 
-
-def _assert_gshhg_resolution_is_valid(resolution: str) -> T.TypeGuard[GSHHGResolution]:
-    msg = f"resolution must be one of: {GSHHG_RESOLUTIONS}, not {resolution}"
-    assert resolution[0].lower() in GSHHG_RESOLUTIONS, msg
-    return True
-
-
-def _assert_gshhg_shoreline_is_valid(shoreline: str | int) -> T.TypeGuard[GSHHGShoreline]:
-    msg = f"shoreline must be one of: {GSHHG_SHORELINES}, not {shoreline}"
-    assert shoreline in GSHHG_SHORELINES, msg
-    return True
-
-
-def _get_gshhg_filename(
+def get_gshhg_filename(
     resolution: GSHHGResolution,
     shoreline: GSHHGShoreline,
 ) -> str:
@@ -75,22 +62,22 @@ def _get_gshhg_filename(
     return f"gshhg_{long_resolution}_l{shoreline}.gpkg"
 
 
-def fetch_gshhg(
+def gshhg(
     resolution: GSHHGResolution,
     shoreline: GSHHGShoreline,
-    version: str = GSHHG_LATEST,
+    version: GSHHGVersion = GSHHG_LATEST_VERSION,
+    *,
     registry_url: str | None = None,
 ) -> str:
-    # sanity check
-    _assert_gshhg_resolution_is_valid(resolution)
-    _assert_gshhg_shoreline_is_valid(shoreline)
-    filename = _get_gshhg_filename(resolution=resolution, shoreline=shoreline)
-    core._is_version_valid(record=GSHHG, filename=filename, version=version, allowed=_GSHHG_ALLOWED)
-    registry = core._load_registry(registry_url=registry_url)
-    entry = registry[GSHHG][version]
-    doi = core._sanitize_url(entry["doi"])
-    hash = entry["hashes"][filename]
-    url = doi + filename
-    repo = core._get_repository(record=GSHHG, version=version, filename=filename, hash=hash, url=url)
-    path: str = repo.fetch(filename)
-    return path
+    core.enforce_literals(gshhg)
+    registry = core.load_registry(registry_url=registry_url)
+    record = registry[GSHHG][version]
+    cache = core.get_cache_path() / GSHHG / version
+    cache.mkdir(parents=True, exist_ok=True)
+    filename = get_gshhg_filename(resolution=resolution, shoreline=shoreline)
+    path = cache / filename
+    if not path.exists():
+        url = record["base_url"] + filename
+        core.download(url, path)
+    core.check_hash(path, record["hashes"][filename])
+    return str(path)
