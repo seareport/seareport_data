@@ -72,11 +72,11 @@ def gshhg(
     core.enforce_literals(gshhg)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[GSHHG][version]
-    cache = core.get_cache_path() / GSHHG / version
-    cache.mkdir(parents=True, exist_ok=True)
+    cache_dir = core.get_cache_path() / GSHHG / version
     filename = get_gshhg_filename(resolution=resolution, shoreline=shoreline)
-    path = cache / filename
+    path = cache_dir / filename
     if not path.exists():
+        cache_dir.mkdir(parents=True, exist_ok=True)
         url = record["base_url"] + filename
         core.download(url, path)
     core.check_hash(path, record["hashes"][filename])

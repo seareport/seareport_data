@@ -43,10 +43,10 @@ def srtm15p(
     core.enforce_literals(srtm15p)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[SRTM15P][version]
-    cache = core.get_cache_path() / SRTM15P / version
-    cache.mkdir(parents=True, exist_ok=True)
-    file_path = cache / record["filename"]
+    cache_dir = core.get_cache_path() / SRTM15P / version
+    file_path = cache_dir / record["filename"]
     if not file_path.exists():
+        cache_dir.mkdir(parents=True, exist_ok=True)
         core.download(record["url"], file_path)
     core.check_hash(file_path, record["hash"])
     return str(file_path)

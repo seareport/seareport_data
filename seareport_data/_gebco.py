@@ -48,13 +48,13 @@ def gebco(
     registry = core.load_registry(registry_url=registry_url)
     version_str = str(version)
     record = registry[GEBCO][version_str][dataset]
-    cache = core.get_cache_path() / GEBCO / version_str / dataset
-    cache.mkdir(parents=True, exist_ok=True)
-    file_path = cache / record["filename"]
-    archive_path = cache / record["archive"]
+    cache_dir = core.get_cache_path() / GEBCO / version_str / dataset
+    file_path = cache_dir / record["filename"]
     if not file_path.exists():
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        archive_path = cache_dir / record["archive"]
         core.download(record["url"], archive_path)
-        core.extract(archive_path, record["filename"], cache)
+        core.extract(archive_path, record["filename"], cache_dir)
+        core.lenient_remove(archive_path)
     core.check_hash(file_path, record["hash"])
-    core.lenient_remove(archive_path)
     return str(file_path)
