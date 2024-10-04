@@ -1,4 +1,11 @@
 {
+  "SRTM15+": {
+    "2.6": {
+      "url": "https://topex.ucsd.edu/pub/srtm15_plus/SRTM15_V2.6.nc",
+      "filename": "SRTM15_V2.6.nc",
+      "hash": "684a2b112de2d9a116e09b6a06882f50"
+    }
+  },
   "GEBCO": {
     "2024": {
       "ice": {
