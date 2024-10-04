@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import importlib.resources
+import inspect
 import json
 import logging
 import os
@@ -17,13 +20,17 @@ from tqdm.auto import tqdm
 logger = logging.getLogger(__name__)
 
 
+# https://stackoverflow.com/a/72832981/592289
+# 1. Use `eval_str=True` in order to allow `from __future__ import annotations`
+# 2. Change the order somewhat in order to make it faster
 def enforce_literals(function: T.Callable[..., T.Any]) -> None:
     kwargs = sys._getframe(1).f_locals
-    for name, type_ in function.__annotations__.items():
-        value = kwargs.get(name)
-        options = T.get_args(type_)
-        if T.get_origin(type_) is T.Literal and name in kwargs and value not in options:
-            raise AssertionError(f"'{value}' is not in {options} for '{name}'")
+    for name, type_ in inspect.get_annotations(function, eval_str=True).items():
+        if T.get_origin(type_) is T.Literal:
+            value = kwargs.get(name)
+            options = set(T.get_args(type_))
+            if name in kwargs and value not in options:
+                raise ValueError(f"Wrong value for '{name}': '{value}' is not in {options}")
 
 
 def resolve_httpx_client(client: httpx.Client | None = None) -> httpx.Client:
