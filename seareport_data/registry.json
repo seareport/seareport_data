@@ -53,5 +53,17 @@
         "gshhg_low_l6.gpkg": "012b42953d0cbffc97ef02d5123a4a6b"
       }
     }
+  },
+  "RTOPO": {
+    "2.0.4": {
+      "doi": "https://doi.pangaea.de/10.1594/PANGAEA.905295",
+      "base_url": "https://hs.pangaea.de/Maps/RTopo-2.0.4/",
+      "hashes": {
+        "RTopo-2.0.4_30sec_bedrock_topography.nc": "542632c2820e1688acd214c10f80e5c8",
+        "RTopo-2.0.4_30sec_ice_base_topography.nc": "8703ab86b9f54d7657c69b29d25e8684",
+        "RTopo-2.0.4_30sec_ice_thickness.nc": "667fc42380d9c624730269ba79d2b7c0",
+        "RTopo-2.0.4_30sec_surface_elevation.nc": "9f963bd41ac0b43385662a672dd7c4b8"
+      }
+    }
   }
 }
