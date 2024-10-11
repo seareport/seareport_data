@@ -54,7 +54,7 @@ def gebco(
         cache_dir.mkdir(parents=True, exist_ok=True)
         archive_path = cache_dir / record["archive"]
         core.download(record["url"], archive_path)
-        core.extract(archive_path, record["filename"], cache_dir)
+        core.extract_zip(archive_path, record["filename"], cache_dir)
         core.lenient_remove(archive_path)
     core.check_hash(file_path, record["hash"])
     return str(file_path)

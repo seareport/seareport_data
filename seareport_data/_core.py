@@ -67,7 +67,7 @@ def download(
                     downloaded = response.num_bytes_downloaded
 
 
-def extract(archive: os.PathLike[str] | str, filename: str, target_dir: os.PathLike[str] | str) -> None:
+def extract_zip(archive: os.PathLike[str] | str, filename: str, target_dir: os.PathLike[str] | str) -> None:
     logger.debug(f"Extracting {filename} to: {target_dir}")
     with zipfile.ZipFile(archive, "r") as zip_ref:
         zip_ref.extract(member=filename, path=target_dir)
