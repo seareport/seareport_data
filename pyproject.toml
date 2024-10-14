@@ -19,6 +19,9 @@ ipython = "*"
 mypy = "*"
 perfometer = {git = "https://github.com/pmav99/perfometer"}
 xarray = "*"
+multifutures = "*"
+hvplot = "*"
+geoviews = "*"
 
 [build-system]
 requires = ["poetry-core"]

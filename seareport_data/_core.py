@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gzip
 import importlib.resources
 import inspect
 import json
@@ -33,10 +34,15 @@ def enforce_literals(function: T.Callable[..., T.Any]) -> None:
                 raise ValueError(f"Wrong value for '{name}': '{value}' is not in {options}")
 
 
-def resolve_httpx_client(client: httpx.Client | None = None) -> httpx.Client:
+def resolve_httpx_client(
+    client: httpx.Client | None = None,
+    timeout: float = 20,
+    read: float = 30,
+) -> httpx.Client:
     if client is None:
-        timeout = httpx.Timeout(timeout=10, read=30)
-        client = httpx.Client(timeout=timeout)
+        client = httpx.Client(
+            timeout=httpx.Timeout(timeout=timeout, read=read),
+        )
     return client
 
 
@@ -71,6 +77,13 @@ def extract_zip(archive: os.PathLike[str] | str, filename: str, target_dir: os.P
     logger.debug(f"Extracting {filename} to: {target_dir}")
     with zipfile.ZipFile(archive, "r") as zip_ref:
         zip_ref.extract(member=filename, path=target_dir)
+
+
+def extract_gzip(archive: os.PathLike[str] | str, target: os.PathLike[str] | str) -> None:
+    logger.debug(f"Extracting {archive} to: {target}")
+    with gzip.open(archive, "rb") as f_in:
+        with open(target, "wb") as f_out:
+            shutil.copyfileobj(f_in, f_out)
 
 
 def hash_file(path: os.PathLike[str] | str, chunksize: int = 2**20) -> str:

@@ -65,5 +65,57 @@
         "RTopo-2.0.4_30sec_surface_elevation.nc": "9f963bd41ac0b43385662a672dd7c4b8"
       }
     }
+  },
+  "ETOPO": {
+    "2022": {
+      "30sec": {
+        "bedrock": {
+          "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/30s/30s_bed_elev_netcdf/ETOPO_2022_v1_30s_N90W180_bed.nc",
+          "filename": "ETOPO_2022_v1_30s_N90W180_bed.nc",
+          "hash": "539e9476ceb15fbc089fae13a66553ff"
+        },
+        "geoid": {
+          "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/30s/30s_geoid_netcdf/ETOPO_2022_v1_30s_N90W180_geoid.nc",
+          "filename": "ETOPO_2022_v1_30s_N90W180_geoid.nc",
+          "hash": "4aa282e6ca9761d74c5764471919fe01"
+        },
+        "surface": {
+          "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/30s/30s_surface_elev_netcdf/ETOPO_2022_v1_30s_N90W180_surface.nc",
+          "filename": "ETOPO_2022_v1_30s_N90W180_surface.nc",
+          "hash": "5ee9a8b9dc0d899c0bae34361f5126b4"
+        }
+      },
+      "60sec": {
+        "bedrock": {
+          "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_bed_elev_netcdf/ETOPO_2022_v1_60s_N90W180_bed.nc",
+          "filename": "ETOPO_2022_v1_60s_N90W180_bed.nc",
+          "hash": "325ad194f595bac15b0cc01f07a45ce9"
+        },
+        "geoid": {
+          "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc",
+          "filename": "ETOPO_2022_v1_60s_N90W180_geoid.nc",
+          "hash": "4d85c436a4855385eb0f9e51ced2fca1"
+        },
+        "surface": {
+          "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc",
+          "filename": "ETOPO_2022_v1_60s_N90W180_surface.nc",
+          "hash": "cdc29e536b080a5f6b85a15a34166f92"
+        }
+      }
+    }
+  },
+  "ETOPO1": {
+    "ice_surface": {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/data/ice_surface/grid_registered/netcdf/ETOPO1_Ice_g_gdal.grd.gz",
+      "archive": "ETOPO1_Ice_g_gdal.grd.gz",
+      "filename": "ETOPO1_Ice_g_gdal.nc",
+      "hash": "afc0fa978290f95f65d0bddfa5b374d2"
+    },
+    "bedrock": {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/data/bedrock/grid_registered/netcdf/ETOPO1_Bed_g_gdal.grd.gz",
+      "archive": "ETOPO1_Bed_g_gdal.grd.gz",
+      "filename": "ETOPO1_Bed_g_gdal.nc",
+      "hash": "d8067832e5866e1dc9be6b63c03fbb27"
+    }
   }
 }

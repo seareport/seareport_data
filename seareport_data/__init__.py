@@ -1,5 +1,6 @@
 import importlib.metadata
 
+from ._etopo import etopo
 from ._gebco import gebco
 from ._gshhg import gshhg
 from ._rtopo import rtopo
@@ -9,6 +10,7 @@ __version__ = importlib.metadata.version(__name__)
 
 
 __all__: list[str] = [
+    "etopo",
     "gebco",
     "gshhg",
     "rtopo",
