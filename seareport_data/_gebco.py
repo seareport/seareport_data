@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # https://stackoverflow.com/a/72832981/592289
 # Types
 GEBCODatasets = T.Literal["ice", "sub_ice"]
-GEBCOVersion = T.Literal[2023, 2024, "2023", "2024"]
+GEBCOVersion = T.Literal["2023", "2024"]
 # Constants
 GEBCO: T.Literal["GEBCO"] = "GEBCO"
 GEBCO_LATEST_VERSION: GEBCOVersion = T.get_args(GEBCOVersion)[-1]

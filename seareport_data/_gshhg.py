@@ -28,7 +28,7 @@ GSHHGResolution = T.Literal[
     "high",
     "full",
 ]
-GSHHGShoreline = T.Literal[5, 6, "5", "6"]
+GSHHGShoreline = T.Literal["5", "6"]
 # Constants
 GSHHG: T.Literal["GSHHG"] = "GSHHG"
 CRUDE: T.Literal["crude"] = "crude"
