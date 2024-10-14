@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import pathlib
 import typing as T
 
 from . import _core as core
@@ -68,7 +69,8 @@ def gshhg(
     version: GSHHGVersion = GSHHG_LATEST_VERSION,
     *,
     registry_url: str | None = None,
-) -> str:
+    as_paths: bool = False,
+) -> core.CachedPaths:
     core.enforce_literals(gshhg)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[GSHHG][version]
@@ -80,4 +82,7 @@ def gshhg(
         url = record["base_url"] + filename
         core.download(url, path)
     core.check_hash(path, record["hashes"][filename])
-    return str(path)
+    if as_paths:
+        return [pathlib.Path(path)]
+    else:
+        return [str(path)]

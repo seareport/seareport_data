@@ -21,6 +21,10 @@ from tqdm.auto import tqdm
 logger = logging.getLogger(__name__)
 
 
+# Types
+CachedPaths = list[str | pathlib.Path]
+
+
 # https://stackoverflow.com/a/72832981/592289
 # 1. Use `eval_str=True` in order to allow `from __future__ import annotations`
 # 2. Change the order somewhat in order to make it faster

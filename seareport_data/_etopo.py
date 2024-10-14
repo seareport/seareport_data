@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import pathlib
 import typing as T
 
 from . import _core as core
@@ -29,7 +30,8 @@ def etopo(
     version: ETopoVersion = ETOPO_LATEST_VERSION,
     *,
     registry_url: str | None = None,
-) -> str:
+    as_paths: bool = False,
+) -> core.CachedPaths:
     core.enforce_literals(etopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[ETOPO][str(version)][resolution][dataset]
@@ -41,4 +43,7 @@ def etopo(
         url = str(record["url"])
         core.download(url, path)
     core.check_hash(path, str(record["hash"]))
-    return str(path)
+    if as_paths:
+        return [pathlib.Path(path)]
+    else:
+        return [str(path)]

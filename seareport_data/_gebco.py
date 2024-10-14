@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import pathlib
 import typing as T
 
 from . import _core as core
@@ -30,7 +31,8 @@ def gebco(
     version: GEBCOVersion = GEBCO_LATEST_VERSION,
     *,
     registry_url: str | None = None,
-) -> str:
+    as_paths: bool = False,
+) -> core.CachedPaths:
     """
     Return the path to a GEBCO dataset, downloading the dataset if necessary.
 
@@ -57,4 +59,7 @@ def gebco(
         core.extract_zip(archive_path, record["filename"], cache_dir)
         core.lenient_remove(archive_path)
     core.check_hash(file_path, record["hash"])
-    return str(file_path)
+    if as_paths:
+        return [pathlib.Path(file_path)]
+    else:
+        return [str(file_path)]

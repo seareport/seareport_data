@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import pathlib
 import typing as T
 
 from . import _core as core
@@ -27,7 +28,8 @@ def srtm15p(
     version: SRTM15PVersion = SRTM15P_LATEST_VERSION,
     *,
     registry_url: str | None = None,
-) -> str:
+    as_paths: bool = False,
+) -> core.CachedPaths:
     """
     Return the path to a SRTM15+ dataset, downloading the dataset if necessary.
 
@@ -49,4 +51,7 @@ def srtm15p(
         cache_dir.mkdir(parents=True, exist_ok=True)
         core.download(record["url"], file_path)
     core.check_hash(file_path, record["hash"])
-    return str(file_path)
+    if as_paths:
+        return [pathlib.Path(file_path)]
+    else:
+        return [str(file_path)]
