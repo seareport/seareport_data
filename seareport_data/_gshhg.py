@@ -4,6 +4,8 @@ import logging
 import pathlib
 import typing as T
 
+import geopandas as gpd
+
 from . import _core as core
 
 logger = logging.getLogger(__name__)
@@ -86,3 +88,21 @@ def gshhg(
         return [pathlib.Path(path)]
     else:
         return [str(path)]
+
+
+def gshhg_df(
+    resolution: GSHHGResolution,
+    shoreline: GSHHGShoreline,
+    version: GSHHGVersion = GSHHG_LATEST_VERSION,
+    *,
+    registry_url: str | None = None,
+    **kwargs: T.Any,
+) -> gpd.GeoDataFrame:
+    path = gshhg(
+        resolution=resolution,
+        shoreline=shoreline,
+        version=version,
+        registry_url=registry_url,
+    )[0]
+    gdf = gpd.read_file(path, **kwargs)
+    return gdf

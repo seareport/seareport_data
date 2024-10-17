@@ -4,6 +4,8 @@ import logging
 import pathlib
 import typing as T
 
+import xarray as xr
+
 from . import _core as core
 
 logger = logging.getLogger(__name__)
@@ -48,3 +50,21 @@ def rtopo(
         return [pathlib.Path(path)]
     else:
         return [str(path)]
+
+
+def rtopo_ds(
+    dataset: RTopoDataset,
+    version: RTopoVersion = RTOPO_LATEST_VERSION,
+    *,
+    registry_url: str | None = None,
+    **kwargs: T.Any,
+) -> xr.Dataset:
+    path = rtopo(
+        dataset=dataset,
+        version=version,
+        registry_url=registry_url,
+    )[0]
+    if "engine" in kwargs and kwargs["engine"] == "h5netcdf":
+        raise ValueError("RTopo is in netcdf classic format, which is not supported by `h5netcdf` engine.")
+    ds = xr.open_dataset(path, **kwargs)
+    return ds

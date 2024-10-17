@@ -7,21 +7,24 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+dask = {version = "*", extras = ["complete"]}
+geopandas = "*"
 httpx = "*"
+platformdirs = "*"
 stamina = "*"
 tqdm = "*"
+xarray = {version = "*", extras = ["accel", "io"]}
 xxhash = "*"
-platformdirs = "*"
 
 [tool.poetry.group.dev.dependencies]
-geopandas = "*"
 ipython = "*"
 mypy = "*"
 perfometer = {git = "https://github.com/pmav99/perfometer"}
-xarray = "*"
 multifutures = "*"
 hvplot = "*"
 geoviews = "*"
+numba = "*"
+datashader = {version = "*", extras = ["geopandas"]}
 
 [build-system]
 requires = ["poetry-core"]

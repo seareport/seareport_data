@@ -4,6 +4,8 @@ import logging
 import pathlib
 import typing as T
 
+import xarray as xr
+
 from . import _core as core
 
 logger = logging.getLogger(__name__)
@@ -47,3 +49,23 @@ def etopo(
         return [pathlib.Path(path)]
     else:
         return [str(path)]
+
+
+def etopo_ds(
+    dataset: ETopoDataset,
+    resolution: ETopoResolution = "30sec",
+    version: ETopoVersion = ETOPO_LATEST_VERSION,
+    *,
+    registry_url: str | None = None,
+    **kwargs: T.Any,
+) -> xr.Dataset:
+    path = etopo(
+        dataset=dataset,
+        resolution=resolution,
+        version=version,
+        registry_url=registry_url,
+    )[0]
+    if "engine" not in kwargs:
+        kwargs["engine"] = "h5netcdf"
+    ds = xr.open_dataset(path, **kwargs)
+    return ds

@@ -4,6 +4,8 @@ import logging
 import pathlib
 import typing as T
 
+import xarray as xr
+
 from . import _core as core
 
 logger = logging.getLogger(__name__)
@@ -63,3 +65,21 @@ def gebco(
         return [pathlib.Path(file_path)]
     else:
         return [str(file_path)]
+
+
+def gebco_ds(
+    dataset: GEBCODatasets,
+    version: GEBCOVersion = GEBCO_LATEST_VERSION,
+    *,
+    registry_url: str | None = None,
+    **kwargs: T.Any,
+) -> xr.Dataset:
+    path = gebco(
+        dataset=dataset,
+        version=version,
+        registry_url=registry_url,
+    )[0]
+    if "engine" not in kwargs:
+        kwargs["engine"] = "h5netcdf"
+    ds = xr.open_dataset(path, **kwargs)
+    return ds
