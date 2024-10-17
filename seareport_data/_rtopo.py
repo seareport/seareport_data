@@ -57,6 +57,7 @@ def rtopo_ds(
     version: RTopoVersion = RTOPO_LATEST_VERSION,
     *,
     registry_url: str | None = None,
+    normalize: bool = True,
     **kwargs: T.Any,
 ) -> xr.Dataset:
     path = rtopo(
@@ -67,4 +68,27 @@ def rtopo_ds(
     if "engine" in kwargs and kwargs["engine"] == "h5netcdf":
         raise ValueError("RTopo is in netcdf classic format, which is not supported by `h5netcdf` engine.")
     ds = xr.open_dataset(path, **kwargs)
+    if normalize:
+        ds = ds.swap_dims({"londim": "lon", "latdim": "lat"})
+        ds = ds.rename_vars({next(iter(ds.data_vars)): "z"})
+        ds.lon.attrs.update(
+            {
+                "name": "lon",
+                "long_name": "longitude coordinate",
+                "units": "degrees_east",
+                "standard_name": "longitude",
+            },
+        )
+        ds.lat.attrs.update(
+            {
+                "name": "lat",
+                "long_name": "latitude coordinate",
+                "units": "degrees_north",
+                "standard_name": "latitude",
+            },
+        )
+        if "title" in ds.z.attrs:
+            ds.z.attrs["title"] = f"RTopo {ds.z.attrs['title']}"
+        else:
+            ds.z.attrs["title"] = "RTopo - ice_thickness"
     return ds
