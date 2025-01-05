@@ -10,6 +10,7 @@ from ._rtopo import rtopo
 from ._rtopo import rtopo_ds
 from ._srtm15p import srtm15p
 from ._srtm15p import srtm15p_ds
+from ._utm import utm_df
 
 __version__ = importlib.metadata.version(__name__)
 
@@ -25,5 +26,6 @@ __all__: list[str] = [
     "rtopo_ds",
     "srtm15p",
     "srtm15p_ds",
+    "utm_df",
     "__version__",
 ]

@@ -15,6 +15,7 @@ stamina = "*"
 tqdm = "*"
 xarray = {version = "*", extras = ["accel", "io"]}
 xxhash = "*"
+shapely = "*"
 
 [tool.poetry.group.dev.dependencies]
 ipython = "*"
@@ -32,7 +33,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 108
-target-version = ['py39']
+target-version = ['py310']
 
 [tool.mypy]
 python_version = "3.10"
@@ -73,7 +74,7 @@ module = "tests.*"
 disallow_untyped_defs = true
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py310"
 line-length = 120
 lint.select = [
   "ARG",  # flake8-unused-argument
