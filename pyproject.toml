@@ -16,6 +16,7 @@ tqdm = "*"
 xarray = {version = "*", extras = ["accel", "io"]}
 xxhash = "*"
 shapely = "*"
+zstandard = "*"
 
 [tool.poetry.group.dev.dependencies]
 ipython = "*"

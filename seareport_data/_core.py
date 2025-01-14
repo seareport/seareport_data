@@ -16,6 +16,7 @@ import httpx
 import platformdirs
 import stamina
 import xxhash
+import zstandard
 from tqdm.auto import tqdm
 
 logger = logging.getLogger(__name__)
@@ -88,6 +89,13 @@ def extract_gzip(archive: os.PathLike[str] | str, target: os.PathLike[str] | str
     with gzip.open(archive, "rb") as f_in:
         with open(target, "wb") as f_out:
             shutil.copyfileobj(f_in, f_out)
+
+
+def extract_zstd(archive: os.PathLike[str] | str, target: os.PathLike[str] | str) -> None:
+    logger.debug(f"Extracting {archive} to: {target}")
+    dctx = zstandard.ZstdDecompressor()
+    with open(archive, "rb") as ifh, open(target, "wb") as ofh:
+        dctx.copy_stream(ifh, ofh)
 
 
 def hash_file(path: os.PathLike[str] | str, chunksize: int = 2**20) -> str:

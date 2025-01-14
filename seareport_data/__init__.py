@@ -6,6 +6,8 @@ from ._gebco import gebco
 from ._gebco import gebco_ds
 from ._gshhg import gshhg
 from ._gshhg import gshhg_df
+from ._osm import osm
+from ._osm import osm_df
 from ._rtopo import rtopo
 from ._rtopo import rtopo_ds
 from ._srtm15p import srtm15p
@@ -22,6 +24,8 @@ __all__: list[str] = [
     "gebco_ds",
     "gshhg",
     "gshhg_df",
+    "osm",
+    "osm_df",
     "rtopo",
     "rtopo_ds",
     "srtm15p",

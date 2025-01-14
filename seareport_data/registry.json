@@ -1,4 +1,14 @@
 {
+  "OSM": {
+    "2025-01": {
+      "land": {
+        "url": "https://zenodo.org/records/14648345/files/osm_land_complete_4326.sqlite.zst?download=1",
+        "archive": "osm_land_complete_4326.sqlite.zstd",
+        "filename": "osm_land_complete_4326.sqlite",
+        "hash": "f0cbc0e738c06996dc4ea43cb32f5b3b"
+      }
+    }
+  },
   "SRTM15+": {
     "2.6": {
       "url": "https://topex.ucsd.edu/pub/srtm15_plus/SRTM15_V2.6.nc",

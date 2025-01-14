@@ -6,6 +6,12 @@
 pip install seareport_data
 ```
 
+or
+
+```
+conda install -c conda-forge seareport_data
+```
+
 ## Usage
 
 ```
@@ -39,4 +45,7 @@ D.srtm15p_ds()
 
 # UTM doesn't have any options
 D.utm_df()
+
+# OSM does have options (e.g. version) but they currently only accept one value so...
+D.osm_df()
 ```
