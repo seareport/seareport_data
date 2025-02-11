@@ -14,7 +14,7 @@ conda install -c conda-forge seareport_data
 
 ## Usage
 
-``` python
+```python
 import seareport_data as D
 
 # ETOPO supports datasets: "bedrock", "surface", "geoid"
@@ -29,8 +29,8 @@ D.etopo_ds("geoid", "60sec", "2022")
 D.gebco_ds("ice", "2023")
 D.gebco_ds("sub_ice", "2024")
 
-# GSSHG supports resolutions: "crude", "low", "intermediate", "high", "full" and
-# GSSHG supports shorelines: "5" and "6"
+# GSHHG supports resolutions: "crude", "low", "intermediate", "high", "full" and
+# GSHHG supports shorelines: "5" and "6"
 D.gshhg_df("low", "5")
 D.gshhg_df("intermediate", "6")
 
