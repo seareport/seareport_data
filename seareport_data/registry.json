@@ -44,6 +44,20 @@
         "filename": "GEBCO_2023_sub_ice_topo.nc",
         "hash": "abda2666d40f6f946a6d1b349fdeacb7"
       }
+    },
+    "2022": {
+      "ice": {
+        "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2022/zip/",
+        "archive": "gebco_2022.zip",
+        "filename": "GEBCO_2022.nc",
+        "hash": "cb7c8bd82a2583091d49510a35fe9660"
+      },
+      "sub_ice": {
+        "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2022_sub_ice_topo/zip/",
+        "archive": "gebco_2022_sub_ice_topo.zip",
+        "filename": "GEBCO_2022_sub_ice_topo.nc",
+        "hash": "6d8d1e10605db37552fe18b1ca87e40c"
+      }
     }
   },
   "GSHHG": {
