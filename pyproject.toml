@@ -6,7 +6,7 @@ authors = ["Panos Mavrogiorgos <pmav99@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10"
 dask = {version = "*", extras = ["complete"]}
 geopandas = "*"
 httpx = "*"
@@ -19,14 +19,17 @@ shapely = "*"
 zstandard = "*"
 
 [tool.poetry.group.dev.dependencies]
-ipython = "*"
-mypy = "*"
-perfometer = {git = "https://github.com/pmav99/perfometer"}
-multifutures = "*"
-hvplot = "*"
-geoviews = "*"
-numba = "*"
 datashader = {version = "*", extras = ["geopandas"]}
+geoviews = "*"
+hvplot = "*"
+ipython = "*"
+multifutures = "*"
+mypy = "*"
+numba = "*"
+pandas-stubs = "*"
+perfometer = {git = "https://github.com/pmav99/perfometer"}
+types-geopandas = "*"
+types-shapely = "*"
 
 [build-system]
 requires = ["poetry-core"]
