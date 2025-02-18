@@ -34,7 +34,7 @@ def gebco(
     *,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> core.CachedPaths:
+) -> list[core.CachedPaths]:
     """
     Return the path to a GEBCO dataset, downloading the dataset if necessary.
 

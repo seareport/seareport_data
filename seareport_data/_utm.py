@@ -60,11 +60,11 @@ def utm_df() -> gpd.GeoDataFrame:
     utm = gpd.GeoDataFrame(tiles, crs=4326)
 
     # Apply Norway exceptions
-    utm.loc[(utm.zone == 31) & (utm.row == "V"), "geometry"] = shapely.box(0, 56, 3, 64)  # noqa: PLR2004
-    utm.loc[(utm.zone == 32) & (utm.row == "V"), "geometry"] = shapely.box(3, 56, 12, 64)  # noqa: PLR2004
-    utm.loc[(utm.zone == 31) & (utm.row == "X"), "geometry"] = shapely.box(0, 72, 9, 84)  # noqa: PLR2004
-    utm.loc[(utm.zone == 33) & (utm.row == "X"), "geometry"] = shapely.box(9, 72, 21, 84)  # noqa: PLR2004
-    utm.loc[(utm.zone == 35) & (utm.row == "X"), "geometry"] = shapely.box(21, 72, 33, 84)  # noqa: PLR2004
-    utm.loc[(utm.zone == 37) & (utm.row == "X"), "geometry"] = shapely.box(33, 72, 42, 84)  # noqa: PLR2004
+    utm.loc[(utm.zone == 31) & (utm.row == "V"), "geometry"] = shapely.box(0, 56, 3, 64)  # type: ignore[call-overload]  # noqa: PLR2004
+    utm.loc[(utm.zone == 32) & (utm.row == "V"), "geometry"] = shapely.box(3, 56, 12, 64)  # type: ignore[call-overload]  # noqa: PLR2004
+    utm.loc[(utm.zone == 31) & (utm.row == "X"), "geometry"] = shapely.box(0, 72, 9, 84)  # type: ignore[call-overload]  # noqa: PLR2004
+    utm.loc[(utm.zone == 33) & (utm.row == "X"), "geometry"] = shapely.box(9, 72, 21, 84)  # type: ignore[call-overload]  # noqa: PLR2004
+    utm.loc[(utm.zone == 35) & (utm.row == "X"), "geometry"] = shapely.box(21, 72, 33, 84)  # type: ignore[call-overload]  # noqa: PLR2004
+    utm.loc[(utm.zone == 37) & (utm.row == "X"), "geometry"] = shapely.box(33, 72, 42, 84)  # type: ignore[call-overload]  # noqa: PLR2004
 
     return utm

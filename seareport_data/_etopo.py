@@ -33,7 +33,7 @@ def etopo(
     *,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> core.CachedPaths:
+) -> list[core.CachedPaths]:
     core.enforce_literals(etopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[ETOPO][str(version)][resolution][dataset]

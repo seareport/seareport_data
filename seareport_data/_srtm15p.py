@@ -31,7 +31,7 @@ def srtm15p(
     *,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> core.CachedPaths:
+) -> list[core.CachedPaths]:
     """
     Return the path to a SRTM15+ dataset, downloading the dataset if necessary.
 

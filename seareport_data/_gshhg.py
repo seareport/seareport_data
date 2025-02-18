@@ -72,7 +72,7 @@ def gshhg(
     *,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> core.CachedPaths:
+) -> list[core.CachedPaths]:
     core.enforce_literals(gshhg)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[GSHHG][version]
@@ -104,5 +104,5 @@ def gshhg_df(
         version=version,
         registry_url=registry_url,
     )[0]
-    gdf = gpd.read_file(path, **kwargs)
+    gdf: gpd.GeoDataFrame = gpd.read_file(path, **kwargs)
     return gdf

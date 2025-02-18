@@ -31,7 +31,7 @@ def osm(
     *,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> core.CachedPaths:
+) -> list[core.CachedPaths]:
     core.enforce_literals(osm)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[OSM][str(version)][dataset]
@@ -65,5 +65,5 @@ def osm_df(
         version=version,
         registry_url=registry_url,
     )[0]
-    gdf = gpd.read_file(path, engine="pyogrio", spatialite=True, **kwargs)
+    gdf: gpd.GeoDataFrame = gpd.read_file(path, engine="pyogrio", spatialite=True, **kwargs)
     return gdf

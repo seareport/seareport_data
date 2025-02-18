@@ -1,5 +1,6 @@
 import importlib.metadata
 
+from ._emodnet import emodnet
 from ._etopo import etopo
 from ._etopo import etopo_ds
 from ._gebco import gebco
@@ -18,6 +19,7 @@ __version__ = importlib.metadata.version(__name__)
 
 
 __all__: list[str] = [
+    "emodnet",
     "etopo",
     "etopo_ds",
     "gebco",

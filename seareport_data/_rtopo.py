@@ -34,7 +34,7 @@ def rtopo(
     *,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> core.CachedPaths:
+) -> list[core.CachedPaths]:
     core.enforce_literals(rtopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[RTOPO][version]

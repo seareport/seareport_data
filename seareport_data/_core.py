@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 # Types
-CachedPaths = list[str | pathlib.Path]
+CachedPaths: T.TypeAlias = str | pathlib.Path
 
 
 # https://stackoverflow.com/a/72832981/592289
