@@ -33,5 +33,6 @@ docs:
 	make -C docs html
 
 deps:
+	mkdir -p requirements
 	pre-commit run poetry-lock -a
 	pre-commit run poetry-export -a
