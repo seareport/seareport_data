@@ -72,6 +72,14 @@
         "filename": "osm_land_complete_4326.sqlite",
         "hash": "f0cbc0e738c06996dc4ea43cb32f5b3b"
       }
+    },
+    "2025-05": {
+      "land": {
+        "url": "https://zenodo.org/records/15570017/files/osm_land_complete_4326.gpkg.zst?download=1",
+        "archive": "osm_land_complete_4326.gpkg.zstd",
+        "filename": "osm_land_complete_4326.gpkg",
+        "hash": "529e1480f321cd234aa6c5414a2fe833"
+      }
     }
   },
   "SRTM15+": {

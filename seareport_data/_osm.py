@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import json
 import logging
+import os
 import pathlib
 import typing as T
 
 import geopandas as gpd
+import pyogrio
 
 from . import _core as core
 
@@ -14,10 +17,23 @@ logger = logging.getLogger(__name__)
 # https://stackoverflow.com/a/72832981/592289
 # Types
 OSMDataset = T.Literal["land"]
-OSMVersion = T.Literal["2025-01"]
+OSMVersion = T.Literal["2025-01", "2025-05"]
 # Constants
 OSM: T.Literal["OSM"] = "OSM"
 OSM_LATEST_VERSION: OSMVersion = T.get_args(OSMVersion)[-1]
+
+
+def read_file(
+    filename: str | os.PathLike[str],
+    layer: str | None = None,
+    **kwargs: T.Any,
+) -> gpd.GeoDataFrame:
+    info = pyogrio.read_info(filename, layer=layer, **kwargs)
+    gdf = T.cast(gpd.GeoDataFrame, gpd.read_file(filename, engine="pyogrio", layer=layer, **kwargs))
+    if layer_metadata := info["layer_metadata"]:
+        if pandas_attrs := layer_metadata.get("PANDAS_ATTRS"):
+            gdf.attrs.update(json.loads(pandas_attrs))
+    return gdf
 
 
 def get_osm_filename(dataset: OSMDataset) -> str:
@@ -65,5 +81,5 @@ def osm_df(
         version=version,
         registry_url=registry_url,
     )[0]
-    gdf: gpd.GeoDataFrame = gpd.read_file(path, engine="pyogrio", spatialite=True, **kwargs)
+    gdf: gpd.GeoDataFrame = read_file(path, **kwargs)
     return gdf
