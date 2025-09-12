@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # https://stackoverflow.com/a/72832981/592289
 # Types
 GEBCODatasets = T.Literal["ice", "sub_ice"]
-GEBCOVersion = T.Literal["2022", "2023", "2024"]
+GEBCOVersion = T.Literal["2021", "2022", "2023", "2024"]
 # Constants
 GEBCO: T.Literal["GEBCO"] = "GEBCO"
 GEBCO_LATEST_VERSION: GEBCOVersion = T.get_args(GEBCOVersion)[-1]
@@ -56,10 +56,13 @@ def gebco(
     file_path = cache_dir / record["filename"]
     if not file_path.exists():
         cache_dir.mkdir(parents=True, exist_ok=True)
-        archive_path = cache_dir / record["archive"]
-        core.download(record["url"], archive_path)
-        core.extract_zip(archive_path, record["filename"], cache_dir)
-        core.lenient_remove(archive_path)
+        if "archive" in record:
+            archive_path = cache_dir / record["archive"]
+            core.download(record["url"], archive_path)
+            core.extract_zip(archive_path, record["filename"], cache_dir)
+            core.lenient_remove(archive_path)
+        else:
+            core.download(record["url"], file_path)
     core.check_hash(file_path, record["hash"])
     if as_paths:
         return [pathlib.Path(file_path)]

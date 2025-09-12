@@ -131,6 +131,19 @@
         "filename": "GEBCO_2022_sub_ice_topo.nc",
         "hash": "6d8d1e10605db37552fe18b1ca87e40c"
       }
+    },
+    "2021": {
+      "ice": {
+        "url": "https://dap.ceda.ac.uk/bodc/gebco/global/gebco_2021/ice_surface_elevation/netcdf/GEBCO_2021_CF.nc",
+        "filename": "GEBCO_2021.nc",
+        "hash": "9feed23b2e93c55f13bd76b1ac55a740"
+      },
+      "sub_ice": {
+        "url": "https://dap.ceda.ac.uk/bodc/gebco/global/gebco_2021/sub_ice_topography_bathymetry/netcdf/gebco_2021_sub_ice_topo.zip",
+        "archive": "gebco_2021.zip",
+        "filename": "GEBCO_2021_sub_ice_topo.nc",
+        "hash": "5afae605f420f94e64b7d901eea8dd9b"
+      }
     }
   },
   "GSHHG": {
