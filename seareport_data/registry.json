@@ -90,6 +90,20 @@
     }
   },
   "GEBCO": {
+    "2025": {
+      "ice": {
+	      "url": "https://dap.ceda.ac.uk/bodc/gebco/global/gebco_2025/ice_surface_elevation/netcdf/gebco_2025.zip",
+        "archive": "gebco_2025.zip",
+        "filename": "GEBCO_2025.nc",
+        "hash": "57a98353e82173c8c0c67e258b7c429b"
+      },
+      "sub_ice": {
+        "url": "https://dap.ceda.ac.uk/bodc/gebco/global/gebco_2025/sub_ice_topography_bathymetry/netcdf/gebco_2025_sub_ice_topo.zip",
+        "archive": "gebco_2025_sub_ice_topo.zip",
+        "filename": "GEBCO_2025_sub_ice.nc",
+        "hash": "1f7c78ec3d9caef4f6a28ecc579434e2"
+      }
+    },
     "2024": {
       "ice": {
         "url": "https://www.bodc.ac.uk/data/open_download/gebco/gebco_2024/zip/",
