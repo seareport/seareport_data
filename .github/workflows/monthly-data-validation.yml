@@ -1,0 +1,33 @@
+name: Monthly Data Validation
+
+on:
+  schedule:
+    # Run at 2 AM UTC on the 1st of every month
+    - cron: '0 2 1 * *'
+  workflow_dispatch:  # Allow manual triggering for testing
+
+jobs:
+  validate-data-downloads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 480  # 8 hour timeout for all combinations
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install seareport_data package
+        run: |
+          pip install --upgrade pip
+          pip install seareport_data
+
+      - name: Set data directory environment variable
+        run: |
+          echo "SEAREPORT_DATA_DIR=${{ runner.temp }}/seareport_data" >> $GITHUB_ENV
+
+      - name: Run validation
+        run: python validate_data.py
