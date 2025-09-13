@@ -47,15 +47,15 @@ def download(
     with client.stream("GET", url) as response:
         _ = response.raise_for_status()
         with open(filename, "wb") as fd:
-            total = int(response.headers["Content-Length"])
             tqdm_params = {
                 "desc": url,
-                "total": total,
                 "miniters": 1,
                 "unit": "B",
                 "unit_scale": True,
                 "unit_divisor": 1024,
             }
+            if "Content-Length" in response.headers:
+                tqdm_params["total"] = int(response.headers["Content-Length"])
             with tqdm(**tqdm_params) as progress:
                 downloaded = response.num_bytes_downloaded
                 for chunk in response.iter_bytes():
