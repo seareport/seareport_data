@@ -7,6 +7,7 @@ import typing as T
 import xarray as xr
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ def rtopo(
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
-    core.enforce_literals(rtopo)
+    enforce_literals(rtopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[RTOPO][version]
     cache_dir = core.get_cache_path() / RTOPO / version

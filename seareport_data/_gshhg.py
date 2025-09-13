@@ -7,6 +7,7 @@ import typing as T
 import geopandas as gpd
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +74,7 @@ def gshhg(
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
-    core.enforce_literals(gshhg)
+    enforce_literals(gshhg)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[GSHHG][version]
     cache_dir = core.get_cache_path() / GSHHG / version

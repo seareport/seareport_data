@@ -4,6 +4,7 @@ import logging
 import typing as T
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ def emodnet(
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
-    core.enforce_literals(emodnet)
+    enforce_literals(emodnet)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[EMODNET][str(version)]
     base_url = T.cast(str, record["base_url"])

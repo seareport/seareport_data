@@ -2,13 +2,11 @@ from __future__ import annotations
 
 import gzip
 import importlib.resources
-import inspect
 import json
 import logging
 import os
 import pathlib
 import shutil
-import sys
 import typing as T
 import zipfile
 
@@ -24,19 +22,7 @@ logger = logging.getLogger(__name__)
 
 # Types
 CachedPaths: T.TypeAlias = str | pathlib.Path
-
-
-# https://stackoverflow.com/a/72832981/592289
-# 1. Use `eval_str=True` in order to allow `from __future__ import annotations`
-# 2. Change the order somewhat in order to make it faster
-def enforce_literals(function: T.Callable[..., T.Any]) -> None:
-    kwargs = sys._getframe(1).f_locals
-    for name, type_ in inspect.get_annotations(function, eval_str=True).items():
-        if T.get_origin(type_) is T.Literal:
-            value = kwargs.get(name)
-            options = set(T.get_args(type_))
-            if name in kwargs and value not in options:
-                raise ValueError(f"Wrong value for '{name}': '{value}' is not in {options}")
+Registry: T.TypeAlias = dict[str, dict[str, dict[str, T.Any]]]
 
 
 def resolve_httpx_client(
@@ -59,7 +45,7 @@ def download(
 ) -> None:
     client = resolve_httpx_client(client=client)
     with client.stream("GET", url) as response:
-        response.raise_for_status()
+        _ = response.raise_for_status()
         with open(filename, "wb") as fd:
             total = int(response.headers["Content-Length"])
             tqdm_params = {

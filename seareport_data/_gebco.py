@@ -7,6 +7,7 @@ import typing as T
 import xarray as xr
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ def gebco(
         str: The path of the requested GEBCO dataset in the local cache.
 
     """
-    core.enforce_literals(gebco)
+    enforce_literals(gebco)
     registry = core.load_registry(registry_url=registry_url)
     version_str = str(version)
     record = registry[GEBCO][version_str][dataset]

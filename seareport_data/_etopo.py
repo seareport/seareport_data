@@ -7,6 +7,7 @@ import typing as T
 import xarray as xr
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ def etopo(
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
-    core.enforce_literals(etopo)
+    enforce_literals(etopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[ETOPO][str(version)][resolution][dataset]
     cache_dir = core.get_cache_path() / ETOPO / version

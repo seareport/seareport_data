@@ -10,6 +10,7 @@ import geopandas as gpd
 import pyogrio
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ def osm(
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
-    core.enforce_literals(osm)
+    enforce_literals(osm)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[OSM][str(version)][dataset]
     logger.debug("Record: %s", record)

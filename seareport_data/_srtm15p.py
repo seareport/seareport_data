@@ -7,6 +7,7 @@ import typing as T
 import xarray as xr
 
 from . import _core as core
+from ._enforce_literals import enforce_literals
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ def srtm15p(
         str: The path of the requested SRTM15+ dataset in the local cache.
 
     """
-    core.enforce_literals(srtm15p)
+    enforce_literals(srtm15p)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[SRTM15P][version]
     cache_dir = core.get_cache_path() / SRTM15P / version
