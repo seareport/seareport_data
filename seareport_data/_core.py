@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import gzip
-import importlib.resources
 import json
 import logging
 import os
@@ -9,6 +8,7 @@ import pathlib
 import shutil
 import typing as T
 import zipfile
+from importlib.resources import files
 
 import httpx
 import platformdirs
@@ -124,9 +124,11 @@ def lenient_remove_tree(path: os.PathLike[str] | str) -> None:
         logger.exception("Failed to remove: %s", path)
 
 
-def load_registry(registry_url: str | None = None) -> dict[str, dict[str, dict[str, T.Any]]]:
-    if registry_url:
-        registry: dict[str, T.Any] = httpx.get(registry_url, timeout=30).json()
+def load_registry(registry_url: str | None = None) -> Registry:
+    registry: Registry
+    if registry_url is not None:
+        registry = httpx.get(registry_url, timeout=30).json()
     else:
-        registry = json.load(importlib.resources.open_text("seareport_data", "registry.json"))
+        with (files("seareport_data") / "registry.json").open() as fd:
+            registry = json.load(fd)
     return registry
