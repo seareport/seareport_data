@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-OSMDataset = T.Literal["land"]
-OSMVersion = T.Literal["2025-01", "2025-05"]
+OSMDataset = T.Literal["land", "ice"]
+OSMVersion = T.Literal["2025-01", "2025-05", "2025-10"]
 # Constants
 OSM: T.Literal["OSM"] = "OSM"
 OSM_LATEST_VERSION: OSMVersion = T.get_args(OSMVersion)[-1]

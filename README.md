@@ -49,6 +49,10 @@ D.utm_df()
 
 # OSM does have options (e.g. version) but they currently only accept one value so...
 D.osm_df()
+D.osm_df("ice")
+D.osm_df("land")
+D.osm_df("ice", "2025-10")
+D.osm_df("land", "2025-05")
 
 # Emodnet support is Provisional.
 # The API only returns the paths to the files. There is no high level function to get the

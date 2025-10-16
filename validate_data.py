@@ -25,9 +25,15 @@ def generate_all_resources():
     """Generate all possible resource combinations based on supported parameters."""
     resources = {}
 
+    osm_datasets = ["land", "ice"]
+    osm_versions = ["2025-10", "2025-05", "2025-01"]
+    for dataset, version in product(osm_datasets, osm_versions):
+        key = f"GEBCO {dataset} {version}"
+        resources[key] = lambda d=dataset, v=version: D.osm_ds(d, v)
+
     etopo_datasets = ["bedrock", "surface", "geoid"]
     etopo_resolutions = ["30sec", "60sec"]
-    etopo_versions = ["2022"]  # None means no version parameter
+    etopo_versions = ["2022"]
     for dataset, resolution, version in product(etopo_datasets, etopo_resolutions, etopo_versions):
         key = f"ETOPO {dataset} {resolution} {version}"
         resources[key] = lambda d=dataset, r=resolution, v=version: D.etopo_ds(d, r, v)

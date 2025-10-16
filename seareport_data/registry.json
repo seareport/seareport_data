@@ -80,6 +80,20 @@
         "filename": "osm_land_complete_4326.gpkg",
         "hash": "529e1480f321cd234aa6c5414a2fe833"
       }
+    },
+    "2025-10": {
+      "ice": {
+        "url": "https://zenodo.org/records/17367868/files/osm_land_complete_4326.gpkg.zst?download=1",
+        "archive": "osm_land_complete_4326.gpkg.zstd",
+        "filename": "osm_land_complete_4326.gpkg",
+        "hash": "74f95f7b3707669bf6f230f544f02a01"
+      },
+      "land": {
+        "url": "https://zenodo.org/records/17367868/files/osm_land_complete_grounding_4326.gpkg.zst?download=1",
+        "archive": "osm_land_complete_grounding_4326.gpkg.zstd",
+        "filename": "osm_land_complete_grounding_4326.gpkg",
+        "hash": "3d0077898a3154afaf5012d7d1525654"
+      }
     }
   },
   "SRTM15+": {
