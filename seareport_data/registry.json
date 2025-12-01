@@ -174,6 +174,46 @@
       }
     }
   },
+  "IBCAO": {
+    "2025": {
+      "100m": {
+        "ice": {
+          "url": "https://dap.ceda.ac.uk/bodc/gebco/ibcao/ibcao_v5.1/greenland_ice_sheet_elevation_data/100mx100m_grid_cell_spacing/single_complete_bathymetric_grid/ibcao_5_1_2025_ice_100m.tiff?download=1",
+          "filename": "ibcao_5_1_2025_greenland_ice_sheet_100m.tiff",
+          "hash": "7d4cfea0eca336480b0cb3a27439ab1e"
+        },
+        "bedrock": {
+          "url": "https://dap.ceda.ac.uk/bodc/gebco/ibcao/ibcao_v5.1/no_greenland_ice_sheet_elevation_data/100mx100m_grid_cell_spacing/single_complete_bathymetric_grid/ibcao_5_1_2025_depth_100m.tiff?download=1",
+          "filename": "ibcao_5_1_2025_no_greenland_ice_sheet_100m.tiff",
+          "hash": "c69497220c4eaee9d2b675ae302ecbe1"
+        }
+      },
+      "200m": {
+        "ice": {
+          "url": "https://dap.ceda.ac.uk/bodc/gebco/ibcao/ibcao_v5.1/greenland_ice_sheet_elevation_data/200mx200m_grid_cell_spacing/single_complete_bathymetric_grid/ibcao_v5_1_2025_200m_ice.tif?download=1",
+          "filename": "ibcao_5_1_2025_greenland_ice_sheet_200m.tiff",
+          "hash": "d1748d08f51bdac85b2d38ade819934e"
+        },
+        "bedrock": {
+          "url": "https://dap.ceda.ac.uk/bodc/gebco/ibcao/ibcao_v5.1/no_greenland_ice_sheet_elevation_data/200mx200m_grid_cell_spacing/single_complete_bathymetric_grid/ibcao_v5_1_2025_depth_200m.tif?download=1",
+          "filename": "ibcao_5_1_2025_no_greenland_ice_sheet_200m.tiff",
+          "hash": "4f7b41746e36eb2d5aae37d16757e027"
+        }
+      },
+      "400m": {
+        "ice": {
+          "url": "https://dap.ceda.ac.uk/bodc/gebco/ibcao/ibcao_v5.1/greenland_ice_sheet_elevation_data/400mx400m_grid_cell_spacing/single_complete_bathymetric_grid/ibcao_v5_1_2025_400m_ice.tif?download=1",
+          "filename": "ibcao_5_1_2025_greenland_ice_sheet_400m.tiff",
+          "hash": "9fc802cf4d6f3c22efdf4d845f9bb1f7"
+        },
+        "bedrock": {
+          "url": "https://dap.ceda.ac.uk/bodc/gebco/ibcao/ibcao_v5.1/no_greenland_ice_sheet_elevation_data/400mx400m_grid_cell_spacing/single_complete_bathymetric_grid/ibcao_v5_1_2025_depth_400m.tif?download=1",
+          "filename": "ibcao_5_1_2025_no_greenland_ice_sheet_400m.tiff",
+          "hash": "74575c5fff4c0e2b9941e10bc98717da"
+        }
+      }
+    }
+  },
   "GSHHG": {
     "2.3.7.1": {
       "doi": "doi:10.5281/zenodo.13785430",
