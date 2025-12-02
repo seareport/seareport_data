@@ -11,12 +11,16 @@ dask = {version = "*", extras = ["complete"]}
 geopandas = "*"
 httpx = "*"
 platformdirs = "*"
+shapely = "*"
 stamina = "*"
 tqdm = "*"
 xarray = {version = "*", extras = ["accel", "io"]}
 xxhash = "*"
-shapely = "*"
 zstandard = "*"
+rioxarray = { version = "*", optional = true }
+
+[tool.poetry.extras]
+raster = ["rioxarray"]
 
 [tool.poetry.group.dev.dependencies]
 datashader = {version = "*", extras = ["geopandas"]}
