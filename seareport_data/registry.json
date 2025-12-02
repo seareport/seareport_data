@@ -214,6 +214,13 @@
       }
     }
   },
+  "ANTGG": {
+    "2022": {
+      "url": "https://zenodo.org/records/17777642/files/WATER_HEIGHT_ANTGG2022.tif?download=1",
+      "filename": "WATER_HEIGHT_ANTGG2022.tif",
+      "hash": "f6d3b94fb5198a84f61e2bf89d276a30"
+    }
+  },
   "GSHHG": {
     "2.3.7.1": {
       "doi": "doi:10.5281/zenodo.13785430",
