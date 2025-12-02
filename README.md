@@ -35,6 +35,15 @@ D.gebco_ds("sub_ice", "2024")
 D.gshhg_df("low", "5")
 D.gshhg_df("intermediate", "6")
 
+# IBCAO (Arctic) supports datasets: "ice" and "bedrock"
+# IBCAO (Arctic) supports resolutions: "100m", "200m" and "400m"
+D.ibcao_ds("bedrock", "200m")
+D.ibcao_ds("ice", "100m")
+
+# ANTGG (Antarctic) has a unique value for version for now
+D.antgg_ds()
+D.antgg_ds("2022")
+
 # RTOPO supports datasets: "bedrock", "ice_base", "ice_thickness", "surface_elevation"
 D.rtopo_ds("bedrock")
 D.rtopo_ds("ice_base")
