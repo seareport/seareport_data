@@ -17,6 +17,7 @@ xarray = {version = "*", extras = ["accel", "io"]}
 xxhash = "*"
 shapely = "*"
 zstandard = "*"
+copernicusmarine = "*"
 
 [tool.poetry.group.dev.dependencies]
 datashader = {version = "*", extras = ["geopandas"]}

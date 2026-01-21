@@ -1,5 +1,7 @@
 import importlib.metadata
 
+from ._copernicus import copernicus
+from ._copernicus import copernicus_ds
 from ._emodnet import emodnet
 from ._etopo import etopo
 from ._etopo import etopo_ds
@@ -19,6 +21,9 @@ __version__ = importlib.metadata.version(__name__)
 
 
 __all__: list[str] = [
+    "__version__",
+    "copernicus",
+    "copernicus_ds",
     "emodnet",
     "etopo",
     "etopo_ds",
@@ -33,5 +38,4 @@ __all__: list[str] = [
     "srtm15p",
     "srtm15p_ds",
     "utm_df",
-    "__version__",
 ]

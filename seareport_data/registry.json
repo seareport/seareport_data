@@ -255,5 +255,14 @@
       "filename": "ETOPO1_Bed_g_gdal.nc",
       "hash": "d8067832e5866e1dc9be6b63c03fbb27"
     }
+  },
+  "COPERNICUS": {
+    "bathy": {
+      "202511": {
+        "dataset_id": "cmems_obs-sdb_glo_phy_comp_my_100m-l4-s2_static",
+        "filename": "cmems_obs-sdb_glo_phy-comp_my-oa-100m-l4-s2_static.nc",
+        "hash": "96d3c308b9e26323756299c539820fc3"
+      }
+    }
   }
 }

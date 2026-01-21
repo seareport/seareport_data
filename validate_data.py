@@ -4,6 +4,7 @@
 Validate all seareport_data resources by downloading them.
 This script downloads each resource and immediately cleans up to manage disk space.
 """
+import functools
 import os
 import shutil
 import sys
@@ -28,8 +29,22 @@ def generate_all_resources():
     osm_datasets = ["land", "ice"]
     osm_versions = ["2025-10", "2025-05", "2025-01"]
     for dataset, version in product(osm_datasets, osm_versions):
-        key = f"GEBCO {dataset} {version}"
-        resources[key] = lambda d=dataset, v=version: D.osm_ds(d, v)
+        key = f"OSM {dataset} {version}"
+        resources[key] = functools.partial(
+            D.osm_df,
+            dataset=dataset,
+            version=version,
+        )
+
+    copernicus_datasets = ["bathy"]
+    copernicus_versions = ["202511"]
+    for dataset, version in product(copernicus_datasets, copernicus_versions):
+        key = f"Copernicus {dataset} {version}"
+        resources[key] = functools.partial(
+            D.copernicus_ds,
+            dataset=dataset,
+            version=version,
+        )
 
     etopo_datasets = ["bedrock", "surface", "geoid"]
     etopo_resolutions = ["30sec", "60sec"]
@@ -91,15 +106,10 @@ def main():
             download_func()
             print(f"✅ Successfully downloaded {name}")
             succeeded.append(name)
-
-            # Clean up to free space for next resource
-            if clean_data_dir():
-                print("   Cleaned up data directory")
-
         except Exception as e:
             print(f"❌ Failed to download {name}: {e}")
             failed.append((name, str(e)))
-
+        finally:
             # Try to clean up even on failure
             clean_data_dir()
 
