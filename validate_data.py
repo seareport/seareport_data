@@ -26,15 +26,11 @@ def generate_all_resources():
     """Generate all possible resource combinations based on supported parameters."""
     resources = {}
 
-    osm_datasets = ["land", "ice"]
-    osm_versions = ["2025-10", "2025-05", "2025-01"]
-    for dataset, version in product(osm_datasets, osm_versions):
-        key = f"OSM {dataset} {version}"
-        resources[key] = functools.partial(
-            D.osm_df,
-            dataset=dataset,
-            version=version,
-        )
+    gshhg_resolutions = ["crude", "low", "intermediate", "high", "full"]
+    gshhg_shorelines = ["5", "6"]
+    for resolution, shoreline in product(gshhg_resolutions, gshhg_shorelines):
+        key = f"GSHHG {resolution} {shoreline}"
+        resources[key] = lambda r=resolution, s=shoreline: D.gshhg_df(r, s)
 
     copernicus_datasets = ["bathy"]
     copernicus_versions = ["202511"]
@@ -46,24 +42,28 @@ def generate_all_resources():
             version=version,
         )
 
-    etopo_datasets = ["bedrock", "surface", "geoid"]
-    etopo_resolutions = ["30sec", "60sec"]
-    etopo_versions = ["2022"]
-    for dataset, resolution, version in product(etopo_datasets, etopo_resolutions, etopo_versions):
-        key = f"ETOPO {dataset} {resolution} {version}"
-        resources[key] = lambda d=dataset, r=resolution, v=version: D.etopo_ds(d, r, v)
-
     gebco_datasets = ["ice", "sub_ice"]
     gebco_versions = ["2021", "2022", "2023", "2024", "2025"]
     for dataset, version in product(gebco_datasets, gebco_versions):
         key = f"GEBCO {dataset} {version}"
         resources[key] = lambda d=dataset, v=version: D.gebco_ds(d, v)
 
-    gshhg_resolutions = ["crude", "low", "intermediate", "high", "full"]
-    gshhg_shorelines = ["5", "6"]
-    for resolution, shoreline in product(gshhg_resolutions, gshhg_shorelines):
-        key = f"GSHHG {resolution} {shoreline}"
-        resources[key] = lambda r=resolution, s=shoreline: D.gshhg_df(r, s)
+    osm_datasets = ["land", "ice"]
+    osm_versions = ["2025-10", "2025-05", "2025-01"]
+    for dataset, version in product(osm_datasets, osm_versions):
+        key = f"OSM {dataset} {version}"
+        resources[key] = functools.partial(
+            D.osm_df,
+            dataset=dataset,
+            version=version,
+        )
+
+    etopo_datasets = ["bedrock", "surface", "geoid"]
+    etopo_resolutions = ["30sec", "60sec"]
+    etopo_versions = ["2022"]
+    for dataset, resolution, version in product(etopo_datasets, etopo_resolutions, etopo_versions):
+        key = f"ETOPO {dataset} {resolution} {version}"
+        resources[key] = lambda d=dataset, r=resolution, v=version: D.etopo_ds(d, r, v)
 
     rtopo_datasets = ["bedrock", "ice_base", "ice_thickness", "surface_elevation"]
     for dataset in rtopo_datasets:

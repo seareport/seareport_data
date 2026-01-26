@@ -15,7 +15,12 @@ import platformdirs
 import stamina
 import xxhash
 import zstandard
-from tqdm.auto import tqdm
+from rich.progress import BarColumn
+from rich.progress import DownloadColumn
+from rich.progress import Progress
+from rich.progress import TextColumn
+from rich.progress import TimeRemainingColumn
+from rich.progress import TransferSpeedColumn
 
 logger = logging.getLogger(__name__)
 
@@ -45,21 +50,20 @@ def download(
     client = resolve_httpx_client(client=client)
     with client.stream("GET", url) as response:
         _ = response.raise_for_status()
-        with open(filename, "wb") as fd:
-            tqdm_params = {
-                "desc": url,
-                "miniters": 1,
-                "unit": "B",
-                "unit_scale": True,
-                "unit_divisor": 1024,
-            }
-            if "Content-Length" in response.headers:
-                tqdm_params["total"] = int(response.headers["Content-Length"])
-            with tqdm(**tqdm_params) as progress:
+        total = int(response.headers.get("Content-Length", 0)) or None
+        with Progress(
+            TextColumn("[bold blue]{task.description}"),
+            BarColumn(),
+            DownloadColumn(),
+            TransferSpeedColumn(),
+            TimeRemainingColumn(),
+        ) as progress:
+            task = progress.add_task(url, total=total)
+            with open(filename, "wb") as fd:
                 downloaded = response.num_bytes_downloaded
                 for chunk in response.iter_bytes():
                     fd.write(chunk)
-                    progress.update(response.num_bytes_downloaded - downloaded)
+                    progress.update(task, advance=response.num_bytes_downloaded - downloaded)
                     downloaded = response.num_bytes_downloaded
 
 

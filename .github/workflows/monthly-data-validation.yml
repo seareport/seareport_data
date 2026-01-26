@@ -23,6 +23,7 @@ jobs:
       - name: Install seareport_data package
         run: |
           pip install --upgrade pip
+          pip install -r requirements/requirements.txt
           pip install seareport_data
 
       - name: Set data directory environment variable

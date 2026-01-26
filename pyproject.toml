@@ -12,12 +12,13 @@ geopandas = "*"
 httpx = "*"
 platformdirs = "*"
 stamina = "*"
-tqdm = "*"
+rich = "*"
 xarray = {version = "*", extras = ["accel", "io"]}
 xxhash = "*"
 shapely = "*"
 zstandard = "*"
 copernicusmarine = "*"
+h5py = "*"
 
 [tool.poetry.group.dev.dependencies]
 datashader = {version = "*", extras = ["geopandas"]}
