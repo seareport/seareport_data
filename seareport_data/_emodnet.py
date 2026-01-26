@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-import typing as T
+import pathlib
+import typing as ty
 
 from . import _core as core
 from ._enforce_literals import enforce_literals
@@ -11,12 +12,30 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-EMODnetVersion = T.Literal["2022"]
+EMODnetVersion = ty.Literal["2022"]
 # Constants
-EMODNET: T.Literal["EMODnet"] = "EMODnet"
-EMODNET_LATEST_VERSION: EMODnetVersion = T.get_args(EMODnetVersion)[-1]
+EMODNET: ty.Literal["EMODnet"] = "EMODnet"
+EMODNET_LATEST_VERSION: EMODnetVersion = ty.get_args(EMODnetVersion)[-1]
 
 
+@ty.overload
+def emodnet(
+    version: EMODnetVersion = EMODNET_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def emodnet(
+    version: EMODnetVersion = EMODNET_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def emodnet(
     version: EMODnetVersion = EMODNET_LATEST_VERSION,
     *,
@@ -24,13 +43,13 @@ def emodnet(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     enforce_literals(emodnet)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[EMODNET][str(version)]
-    base_url = T.cast(str, record["base_url"])
+    base_url = ty.cast(str, record["base_url"])
     cache_dir = core.get_cache_path() / EMODNET / version
-    paths: list[core.CachedPaths] = []
+    paths: list[pathlib.Path] = []
     for filename, expected_hash in record["hashes"].items():
         assert isinstance(filename, str)
         assert isinstance(expected_hash, str)

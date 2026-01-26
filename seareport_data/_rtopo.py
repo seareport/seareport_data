@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import pathlib
-import typing as T
+import typing as ty
 
 import xarray as xr
 
@@ -14,11 +14,11 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-RTopoVersion = T.Literal["2.0.4"]
-RTopoDataset = T.Literal["bedrock", "ice_base", "ice_thickness", "surface_elevation"]
+RTopoVersion = ty.Literal["2.0.4"]
+RTopoDataset = ty.Literal["bedrock", "ice_base", "ice_thickness", "surface_elevation"]
 # Constants
-RTOPO: T.Literal["RTOPO"] = "RTOPO"
-RTOPO_LATEST_VERSION: RTopoVersion = sorted(T.get_args(RTopoVersion))[-1]
+RTOPO: ty.Literal["RTOPO"] = "RTOPO"
+RTOPO_LATEST_VERSION: RTopoVersion = sorted(ty.get_args(RTopoVersion))[-1]
 
 
 def get_rtopo_filename(dataset: RTopoDataset, version: RTopoVersion) -> str:
@@ -29,6 +29,26 @@ def get_rtopo_filename(dataset: RTopoDataset, version: RTopoVersion) -> str:
     return filename
 
 
+@ty.overload
+def rtopo(
+    dataset: RTopoDataset,
+    version: RTopoVersion = RTOPO_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def rtopo(
+    dataset: RTopoDataset,
+    version: RTopoVersion = RTOPO_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def rtopo(
     dataset: RTopoDataset,
     version: RTopoVersion = RTOPO_LATEST_VERSION,
@@ -37,7 +57,7 @@ def rtopo(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     enforce_literals(rtopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[RTOPO][version]
@@ -64,7 +84,7 @@ def rtopo_ds(
     check_hash: bool = True,
     registry_url: str | None = None,
     normalize: bool = True,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> xr.Dataset:
     path = rtopo(
         dataset=dataset,

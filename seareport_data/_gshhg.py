@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import pathlib
-import typing as T
+import typing as ty
 
 import geopandas as gpd
 
@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-GSHHGVersion = T.Literal["2.3.7.1"]
-GSHHGResolution = T.Literal[
+GSHHGVersion = ty.Literal["2.3.7.1"]
+GSHHGResolution = ty.Literal[
     "c",
     "l",
     "i",
@@ -31,18 +31,18 @@ GSHHGResolution = T.Literal[
     "high",
     "full",
 ]
-GSHHGShoreline = T.Literal["5", "6"]
+GSHHGShoreline = ty.Literal["5", "6"]
 # Constants
-GSHHG: T.Literal["GSHHG"] = "GSHHG"
-CRUDE: T.Literal["crude"] = "crude"
-LOW: T.Literal["low"] = "low"
-INTERMEDIATE: T.Literal["intermediate"] = "intermediate"
-HIGH: T.Literal["high"] = "high"
-FULL: T.Literal["full"] = "full"
-GSHHG_LATEST_VERSION: GSHHGVersion = sorted(T.get_args(GSHHGVersion))[-1]
+GSHHG: ty.Literal["GSHHG"] = "GSHHG"
+CRUDE: ty.Literal["crude"] = "crude"
+LOW: ty.Literal["low"] = "low"
+INTERMEDIATE: ty.Literal["intermediate"] = "intermediate"
+HIGH: ty.Literal["high"] = "high"
+FULL: ty.Literal["full"] = "full"
+GSHHG_LATEST_VERSION: GSHHGVersion = sorted(ty.get_args(GSHHGVersion))[-1]
 
 
-class GSHHGRecord(T.TypedDict):
+class GSHHGRecord(ty.TypedDict):
     doi: str
     base_url: str
     hashes: dict[str, str]
@@ -66,6 +66,28 @@ def get_gshhg_filename(
     return f"gshhg_{long_resolution}_l{shoreline}.gpkg"
 
 
+@ty.overload
+def gshhg(
+    resolution: GSHHGResolution,
+    shoreline: GSHHGShoreline,
+    version: GSHHGVersion = GSHHG_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def gshhg(
+    resolution: GSHHGResolution,
+    shoreline: GSHHGShoreline,
+    version: GSHHGVersion = GSHHG_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def gshhg(
     resolution: GSHHGResolution,
     shoreline: GSHHGShoreline,
@@ -75,7 +97,7 @@ def gshhg(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     enforce_literals(gshhg)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[GSHHG][version]
@@ -102,7 +124,7 @@ def gshhg_df(
     download: bool = True,
     check_hash: bool = True,
     registry_url: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> gpd.GeoDataFrame:
     path = gshhg(
         resolution=resolution,

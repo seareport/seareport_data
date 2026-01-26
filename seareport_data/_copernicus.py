@@ -1,6 +1,6 @@
 import logging
 import pathlib
-import typing as T
+import typing as ty
 
 import xarray as xr
 
@@ -13,28 +13,48 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-COPERNICUSDataset = T.Literal["bathy"]
-COPERNICUSBathyVersion = T.Literal["202511"]
+COPERNICUSDataset = ty.Literal["bathy"]
+COPERNICUSBathyVersion = ty.Literal["202511"]
 COPERNICUSVersion = COPERNICUSBathyVersion
 # Constants
-COPERNICUS: T.Literal["COPERNICUS"] = "COPERNICUS"
-BATHY: T.Literal["BATHY"] = "BATHY"
+COPERNICUS: ty.Literal["COPERNICUS"] = "COPERNICUS"
+BATHY: ty.Literal["BATHY"] = "BATHY"
 
 
 def resolve_version(dataset: COPERNICUSDataset) -> COPERNICUSVersion:
     if dataset == "bathy":
-        latest: COPERNICUSVersion = T.get_args(COPERNICUSBathyVersion)[-1]
+        latest: COPERNICUSVersion = ty.get_args(COPERNICUSBathyVersion)[-1]
     else:
         raise ValueError(f"Unknown dataset: {dataset}")
     return latest
 
 
-class COPERNICUSRecord(T.TypedDict):
+class COPERNICUSRecord(ty.TypedDict):
     dataset_id: str
     filename: str
     hash: str
 
 
+@ty.overload
+def copernicus(
+    dataset: COPERNICUSDataset = "bathy",
+    version: COPERNICUSBathyVersion | None = None,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def copernicus(
+    dataset: COPERNICUSDataset = "bathy",
+    version: COPERNICUSBathyVersion | None = None,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def copernicus(
     dataset: COPERNICUSDataset = "bathy",
     version: COPERNICUSBathyVersion | None = None,
@@ -43,7 +63,7 @@ def copernicus(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     """
     Return the path to a GEBCO dataset, downloading the dataset if necessary.
 
@@ -88,7 +108,7 @@ def copernicus_ds(
     download: bool = True,
     check_hash: bool = True,
     registry_url: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> xr.Dataset:
     path = copernicus(
         dataset=dataset,

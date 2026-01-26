@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 # Types
-CachedPaths: T.TypeAlias = str | pathlib.Path
 Registry: T.TypeAlias = dict[str, dict[str, dict[str, T.Any]]]
 
 

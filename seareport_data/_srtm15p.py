@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import pathlib
-import typing as T
+import typing as ty
 
 import xarray as xr
 
@@ -15,18 +15,36 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-SRTM15PVersion = T.Literal["2.6"]
+SRTM15PVersion = ty.Literal["2.6"]
 # Constants
-SRTM15P: T.Literal["SRTM15+"] = "SRTM15+"
-SRTM15P_LATEST_VERSION: SRTM15PVersion = T.get_args(SRTM15PVersion)[-1]
+SRTM15P: ty.Literal["SRTM15+"] = "SRTM15+"
+SRTM15P_LATEST_VERSION: SRTM15PVersion = ty.get_args(SRTM15PVersion)[-1]
 
 
-class SRTM15PRecord(T.TypedDict):
+class SRTM15PRecord(ty.TypedDict):
     url: str
     filename: str
     hash: str
 
 
+@ty.overload
+def srtm15p(
+    version: SRTM15PVersion = SRTM15P_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def srtm15p(
+    version: SRTM15PVersion = SRTM15P_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def srtm15p(
     version: SRTM15PVersion = SRTM15P_LATEST_VERSION,
     *,
@@ -34,7 +52,7 @@ def srtm15p(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     """
     Return the path to a SRTM15+ dataset, downloading the dataset if necessary.
 
@@ -69,7 +87,7 @@ def srtm15p_ds(
     download: bool = True,
     check_hash: bool = True,
     registry_url: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> xr.Dataset:
     path = srtm15p(
         version=version,

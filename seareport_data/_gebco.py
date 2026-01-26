@@ -1,6 +1,6 @@
 import logging
 import pathlib
-import typing as T
+import typing as ty
 
 import xarray as xr
 
@@ -13,20 +13,40 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-GEBCODatasets = T.Literal["ice", "sub_ice"]
-GEBCOVersion = T.Literal["2021", "2022", "2023", "2024", "2025"]
+GEBCODatasets = ty.Literal["ice", "sub_ice"]
+GEBCOVersion = ty.Literal["2021", "2022", "2023", "2024", "2025"]
 # Constants
-GEBCO: T.Literal["GEBCO"] = "GEBCO"
-GEBCO_LATEST_VERSION: GEBCOVersion = T.get_args(GEBCOVersion)[-1]
+GEBCO: ty.Literal["GEBCO"] = "GEBCO"
+GEBCO_LATEST_VERSION: GEBCOVersion = ty.get_args(GEBCOVersion)[-1]
 
 
-class GEBCORecord(T.TypedDict):
+class GEBCORecord(ty.TypedDict):
     url: str
     archive: str
     filename: str
     hash: str
 
 
+@ty.overload
+def gebco(
+    dataset: GEBCODatasets,
+    version: GEBCOVersion = GEBCO_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def gebco(
+    dataset: GEBCODatasets,
+    version: GEBCOVersion = GEBCO_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def gebco(
     dataset: GEBCODatasets,
     version: GEBCOVersion = GEBCO_LATEST_VERSION,
@@ -35,7 +55,7 @@ def gebco(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     """
     Return the path to a GEBCO dataset, downloading the dataset if necessary.
 
@@ -79,7 +99,7 @@ def gebco_ds(
     download: bool = True,
     check_hash: bool = True,
     registry_url: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> xr.Dataset:
     path = gebco(
         dataset=dataset,

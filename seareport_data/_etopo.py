@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import pathlib
-import typing as T
+import typing as ty
 
 import xarray as xr
 
@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-ETopoDataset = T.Literal["bedrock", "surface", "geoid"]
-ETopoVersion = T.Literal["2022"]
-ETopoResolution = T.Literal["30sec", "60sec"]
+ETopoDataset = ty.Literal["bedrock", "surface", "geoid"]
+ETopoVersion = ty.Literal["2022"]
+ETopoResolution = ty.Literal["30sec", "60sec"]
 # Constants
-ETOPO: T.Literal["ETOPO"] = "ETOPO"
-ETOPO_LATEST_VERSION: ETopoVersion = T.get_args(ETopoVersion)[-1]
+ETOPO: ty.Literal["ETOPO"] = "ETOPO"
+ETOPO_LATEST_VERSION: ETopoVersion = ty.get_args(ETopoVersion)[-1]
 
 
 def get_etopo_filename(dataset: ETopoDataset) -> str:
@@ -27,6 +27,28 @@ def get_etopo_filename(dataset: ETopoDataset) -> str:
     return filename
 
 
+@ty.overload
+def etopo(
+    dataset: ETopoDataset,
+    resolution: ETopoResolution = "30sec",
+    version: ETopoVersion = ETOPO_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def etopo(
+    dataset: ETopoDataset,
+    resolution: ETopoResolution = "30sec",
+    version: ETopoVersion = ETOPO_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def etopo(
     dataset: ETopoDataset,
     resolution: ETopoResolution = "30sec",
@@ -36,7 +58,7 @@ def etopo(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     enforce_literals(etopo)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[ETOPO][str(version)][resolution][dataset]
@@ -63,7 +85,7 @@ def etopo_ds(
     download: bool = True,
     check_hash: bool = True,
     registry_url: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> xr.Dataset:
     path = etopo(
         dataset=dataset,

@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import pathlib
-import typing as T
+import typing as ty
 
 import geopandas as gpd
 import pyogrio
@@ -17,20 +17,20 @@ logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/a/72832981/592289
 # Types
-OSMDataset = T.Literal["land", "ice"]
-OSMVersion = T.Literal["2025-01", "2025-05", "2025-10"]
+OSMDataset = ty.Literal["land", "ice"]
+OSMVersion = ty.Literal["2025-01", "2025-05", "2025-10"]
 # Constants
-OSM: T.Literal["OSM"] = "OSM"
-OSM_LATEST_VERSION: OSMVersion = T.get_args(OSMVersion)[-1]
+OSM: ty.Literal["OSM"] = "OSM"
+OSM_LATEST_VERSION: OSMVersion = ty.get_args(OSMVersion)[-1]
 
 
 def read_file(
     filename: str | os.PathLike[str],
     layer: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> gpd.GeoDataFrame:
     info = pyogrio.read_info(filename, layer=layer, **kwargs)
-    gdf = T.cast(gpd.GeoDataFrame, gpd.read_file(filename, engine="pyogrio", layer=layer, **kwargs))
+    gdf = ty.cast(gpd.GeoDataFrame, gpd.read_file(filename, engine="pyogrio", layer=layer, **kwargs))
     if layer_metadata := info["layer_metadata"]:
         if pandas_attrs := layer_metadata.get("PANDAS_ATTRS"):
             gdf.attrs.update(json.loads(pandas_attrs))
@@ -42,6 +42,26 @@ def get_osm_filename(dataset: OSMDataset) -> str:
     return filename
 
 
+@ty.overload
+def osm(
+    dataset: OSMDataset = "land",
+    version: OSMVersion = OSM_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[False] = False,
+) -> list[str]: ...
+@ty.overload
+def osm(
+    dataset: OSMDataset = "land",
+    version: OSMVersion = OSM_LATEST_VERSION,
+    *,
+    download: bool = True,
+    check_hash: bool = True,
+    registry_url: str | None = None,
+    as_paths: ty.Literal[True],
+) -> list[pathlib.Path]: ...
 def osm(
     dataset: OSMDataset = "land",
     version: OSMVersion = OSM_LATEST_VERSION,
@@ -50,7 +70,7 @@ def osm(
     check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
-) -> list[core.CachedPaths]:
+) -> list[str] | list[pathlib.Path]:
     enforce_literals(osm)
     registry = core.load_registry(registry_url=registry_url)
     record = registry[OSM][str(version)][dataset]
@@ -80,7 +100,7 @@ def osm_df(
     download: bool = True,
     check_hash: bool = True,
     registry_url: str | None = None,
-    **kwargs: T.Any,
+    **kwargs: ty.Any,
 ) -> gpd.GeoDataFrame:
     path = osm(
         dataset=dataset,
