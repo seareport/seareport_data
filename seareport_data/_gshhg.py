@@ -71,6 +71,8 @@ def gshhg(
     shoreline: GSHHGShoreline,
     version: GSHHGVersion = GSHHG_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
@@ -80,11 +82,12 @@ def gshhg(
     cache_dir = core.get_cache_path() / GSHHG / version
     filename = get_gshhg_filename(resolution=resolution, shoreline=shoreline)
     path = cache_dir / filename
-    if not path.exists():
+    if download and not path.exists():
         cache_dir.mkdir(parents=True, exist_ok=True)
         url = record["base_url"] + filename
         core.download(url, path)
-    core.check_hash(path, record["hashes"][filename])
+    if check_hash:
+        core.check_hash(path, record["hashes"][filename])
     if as_paths:
         return [pathlib.Path(path)]
     else:
@@ -96,6 +99,8 @@ def gshhg_df(
     shoreline: GSHHGShoreline,
     version: GSHHGVersion = GSHHG_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     **kwargs: T.Any,
 ) -> gpd.GeoDataFrame:
@@ -103,6 +108,8 @@ def gshhg_df(
         resolution=resolution,
         shoreline=shoreline,
         version=version,
+        download=download,
+        check_hash=check_hash,
         registry_url=registry_url,
     )[0]
     gdf: gpd.GeoDataFrame = gpd.read_file(path, **kwargs)

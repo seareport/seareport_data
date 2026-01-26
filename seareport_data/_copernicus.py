@@ -39,6 +39,8 @@ def copernicus(
     dataset: COPERNICUSDataset = "bathy",
     version: COPERNICUSBathyVersion | None = None,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
@@ -63,7 +65,7 @@ def copernicus(
     registry = core.load_registry(registry_url=registry_url)
     record: COPERNICUSRecord = registry[COPERNICUS][dataset][version]
     file_path = cache_dir / record["filename"]
-    if not file_path.exists():
+    if download and not file_path.exists():
         cache_dir.mkdir(parents=True, exist_ok=True)
         _ = copernicusmarine.get(
             dataset_id=record["dataset_id"],
@@ -71,7 +73,8 @@ def copernicus(
             no_directories=True,
             output_directory=cache_dir,
         )
-    core.check_hash(file_path, record["hash"])
+    if check_hash:
+        core.check_hash(file_path, record["hash"])
     if as_paths:
         return [pathlib.Path(file_path)]
     else:
@@ -82,12 +85,16 @@ def copernicus_ds(
     dataset: COPERNICUSDataset = "bathy",
     version: COPERNICUSBathyVersion | None = None,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     **kwargs: T.Any,
 ) -> xr.Dataset:
     path = copernicus(
         dataset=dataset,
         version=version,
+        download=download,
+        check_hash=check_hash,
         registry_url=registry_url,
     )[0]
     if "engine" not in kwargs:

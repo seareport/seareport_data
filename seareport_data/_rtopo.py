@@ -33,6 +33,8 @@ def rtopo(
     dataset: RTopoDataset,
     version: RTopoVersion = RTOPO_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
@@ -42,11 +44,12 @@ def rtopo(
     cache_dir = core.get_cache_path() / RTOPO / version
     filename = get_rtopo_filename(dataset=dataset, version=version)
     path = cache_dir / filename
-    if not path.exists():
+    if download and not path.exists():
         cache_dir.mkdir(parents=True, exist_ok=True)
         url = record["base_url"] + filename
         core.download(url, path)
-    core.check_hash(path, record["hashes"][filename])
+    if check_hash:
+        core.check_hash(path, record["hashes"][filename])
     if as_paths:
         return [pathlib.Path(path)]
     else:
@@ -57,6 +60,8 @@ def rtopo_ds(
     dataset: RTopoDataset,
     version: RTopoVersion = RTOPO_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     normalize: bool = True,
     **kwargs: T.Any,
@@ -64,6 +69,8 @@ def rtopo_ds(
     path = rtopo(
         dataset=dataset,
         version=version,
+        download=download,
+        check_hash=check_hash,
         registry_url=registry_url,
     )[0]
     if "engine" in kwargs and kwargs["engine"] == "h5netcdf":

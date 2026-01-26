@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 import pathlib
 import typing as T
@@ -33,6 +31,8 @@ def gebco(
     dataset: GEBCODatasets,
     version: GEBCOVersion = GEBCO_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
@@ -55,7 +55,7 @@ def gebco(
     record = registry[GEBCO][version_str][dataset]
     cache_dir = core.get_cache_path() / GEBCO / version_str / dataset
     file_path = cache_dir / record["filename"]
-    if not file_path.exists():
+    if download and not file_path.exists():
         cache_dir.mkdir(parents=True, exist_ok=True)
         if "archive" in record:
             archive_path = cache_dir / record["archive"]
@@ -64,7 +64,8 @@ def gebco(
             core.lenient_remove(archive_path)
         else:
             core.download(record["url"], file_path)
-    core.check_hash(file_path, record["hash"])
+    if check_hash:
+        core.check_hash(file_path, record["hash"])
     if as_paths:
         return [pathlib.Path(file_path)]
     else:
@@ -75,12 +76,16 @@ def gebco_ds(
     dataset: GEBCODatasets,
     version: GEBCOVersion = GEBCO_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     **kwargs: T.Any,
 ) -> xr.Dataset:
     path = gebco(
         dataset=dataset,
         version=version,
+        download=download,
+        check_hash=check_hash,
         registry_url=registry_url,
     )[0]
     if "engine" not in kwargs:

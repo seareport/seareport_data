@@ -20,6 +20,8 @@ EMODNET_LATEST_VERSION: EMODnetVersion = T.get_args(EMODnetVersion)[-1]
 def emodnet(
     version: EMODnetVersion = EMODNET_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
@@ -34,12 +36,13 @@ def emodnet(
         assert isinstance(expected_hash, str)
         archive = cache_dir / f"{filename}.zip"
         path = cache_dir / filename
-        if not path.exists():
+        if download and not path.exists():
             cache_dir.mkdir(parents=True, exist_ok=True)
             url = f"{base_url}{filename}.zip"
             core.download(url, archive)
             core.extract_zip(archive=archive, filename=filename, target_dir=cache_dir)
-            core.check_hash(path, expected_hash)
+            if check_hash:
+                core.check_hash(path, expected_hash)
             core.lenient_remove(archive)
         paths.append(path)
     if as_paths:

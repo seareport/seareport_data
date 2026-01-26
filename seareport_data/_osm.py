@@ -46,6 +46,8 @@ def osm(
     dataset: OSMDataset = "land",
     version: OSMVersion = OSM_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     as_paths: bool = False,
 ) -> list[core.CachedPaths]:
@@ -56,14 +58,15 @@ def osm(
     cache_dir = core.get_cache_path() / OSM / version
     filename = str(record["filename"])
     path = cache_dir / filename
-    if not path.exists():
+    if download and not path.exists():
         cache_dir.mkdir(parents=True, exist_ok=True)
         archive_path = cache_dir / record["archive"]
         url = str(record["url"])
         core.download(url, archive_path)
         core.extract_zstd(archive_path, path)
         core.lenient_remove(archive_path)
-    core.check_hash(path, str(record["hash"]))
+    if check_hash:
+        core.check_hash(path, str(record["hash"]))
     if as_paths:
         return [pathlib.Path(path)]
     else:
@@ -74,12 +77,16 @@ def osm_df(
     dataset: OSMDataset = "land",
     version: OSMVersion = OSM_LATEST_VERSION,
     *,
+    download: bool = True,
+    check_hash: bool = True,
     registry_url: str | None = None,
     **kwargs: T.Any,
 ) -> gpd.GeoDataFrame:
     path = osm(
         dataset=dataset,
         version=version,
+        download=download,
+        check_hash=check_hash,
         registry_url=registry_url,
     )[0]
     gdf: gpd.GeoDataFrame = read_file(path, **kwargs)
